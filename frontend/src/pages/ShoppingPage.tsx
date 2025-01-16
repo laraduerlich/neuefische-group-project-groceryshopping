@@ -1,7 +1,8 @@
 export default function ShoppingPage(){
 
-    return(
-        <>
-        </>
+    return (
+        <div className="shopping-page">
+            Shopping Page
+        </div>
     )
 }

@@ -13,12 +13,13 @@ function App() {
   return (
     <>
       <Header />
-      <Routes>
-        <Route path={"/"} element={<HomePage />} />
-        <Route path={"/shoppinglist"} element={<ShoppingListPage />} />
-        <Route path={"/shopping"} element={<ShoppingPage />} />
-      </Routes>
-
+        <div id="page-body-main">
+            <Routes>
+                <Route path={"/"} element={<HomePage />} />
+                <Route path={"/shoppinglist"} element={<ShoppingListPage />} />
+                <Route path={"/shopping"} element={<ShoppingPage />} />
+            </Routes>
+        </div>
       <Footer />
     </>
   )
