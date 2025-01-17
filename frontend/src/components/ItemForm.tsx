@@ -1,31 +1,19 @@
 import {Item} from "../type/Item.tsx";
-import {ChangeEvent, FormEvent} from "react";
+import {FormEvent, useState} from "react";
 
 type ItemFormProps = {
-    addItem: Item;
-    quantity: string;
-    onChange?: (item: Item) => void;
-    onQuantityChange?: (quantity: string) => void;
     onSubmit?: (item: Item, quantity: string) => void
 }
 
-export default function ItemForm({addItem, quantity, onChange, onQuantityChange, onSubmit}: ItemFormProps){
+export default function ItemForm({onSubmit}: ItemFormProps){
 
-    const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
-        onChange?.({ ...addItem, name: event.target.value });
-    };
-
-    const handleSectorChange = (event: ChangeEvent<HTMLInputElement>) => {
-        onChange?.({ ...addItem, sector: event.target.value });
-    };
-
-    const handleQuantityChange = (event: ChangeEvent<HTMLInputElement>) => {
-        onQuantityChange?.(event.target.value);
-    };
+    const [name, setName] = useState("");
+    const [sector, setSector] = useState("");
+    const [quantity, setQuantity] = useState("");
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault(); // Verhindert das Neuladen der Seite
-        onSubmit?.(addItem, quantity); // Ruft den onSubmit-Handler auf
+        onSubmit?.({name, sector}, quantity); // Ruft den onSubmit-Handler auf
     };
 
     return (
@@ -36,19 +24,19 @@ export default function ItemForm({addItem, quantity, onChange, onQuantityChange,
                 <input type="text"
                        id="name"
                        name="name"
-                       value={addItem.name}
-                       onChange={handleNameChange} />
+                       value={name}
+                       onChange={(e) => setName(e.target.value)} />
                 <label htmlFor="quantity">Quantity:</label>
                 <input type="text"
                        id="quantity"
                        name="quantity"
                        value={quantity}
-                       onChange={handleQuantityChange} />
+                       onChange={(e) => setQuantity(e.target.value)}  />
                 <label htmlFor="sector">Sector:</label>
                 <input id="sector"
                        name="sector"
-                       value={addItem.sector}
-                       onChange={handleSectorChange} />
+                       value={sector}
+                       onChange={(e) => setSector(e.target.value)} />
                 <button>Add</button>
             </form>
 
