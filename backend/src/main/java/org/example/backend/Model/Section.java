@@ -1,6 +1,6 @@
 package org.example.backend.Model;
 
-public enum Category {
+public enum Section {
     FRUIT,         // All fresh Fruits
     VEGETABLE,     // All fresh Vegetables
     DAIRY,         // Milk, Cheese, Yogurt

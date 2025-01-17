@@ -11,5 +11,5 @@ public record Item(
         double quantity,
         Unit unit,
         boolean checked,
-        Category category
+        Section section
 ) { }
