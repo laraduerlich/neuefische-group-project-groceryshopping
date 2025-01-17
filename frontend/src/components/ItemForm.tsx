@@ -1,4 +1,4 @@
-import {Item} from "../type/Item.tsx";
+import {Item, Section} from "../type/Item.tsx";
 import {FormEvent, useState} from "react";
 
 type ItemFormProps = {
@@ -8,13 +8,15 @@ type ItemFormProps = {
 export default function ItemForm({onSubmit}: ItemFormProps){
 
     const [name, setName] = useState("");
-    const [sector, setSector] = useState("");
-    const [quantity, setQuantity] = useState("");
+    const [section, setSection] = useState<Section>("other");
+    const [quantity, setQuantity] = useState("0");
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault(); // Verhindert das Neuladen der Seite
-        onSubmit?.({name, sector}, quantity); // Ruft den onSubmit-Handler auf
+        onSubmit?.({name, section}, quantity); // Ruft den onSubmit-Handler auf
     };
+
+    const sections: Section[] = ["fruit", "vegetable", "dairy", "meat", "bakery", "beverages", "frozen", "snacks", "pantry", "household", "personal care", "other"];
 
     return (
         <>
@@ -33,10 +35,12 @@ export default function ItemForm({onSubmit}: ItemFormProps){
                        value={quantity}
                        onChange={(e) => setQuantity(e.target.value)}  />
                 <label htmlFor="sector">Sector:</label>
-                <input id="sector"
+                <select id="sector"
                        name="sector"
-                       value={sector}
-                       onChange={(e) => setSector(e.target.value)} />
+                       value={section}
+                       onChange={(e) => setSection(e.target.value as Section)}>
+                        {sections.map((section, index) => (<option key={index} value={section}>{section}</option>))}
+                </select>
                 <button>Add</button>
             </form>
 
