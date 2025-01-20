@@ -2,7 +2,8 @@ package org.example.backend.Repo;
 
 import org.example.backend.Model.ShoppingList;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import java.util.UUID;
+import org.springframework.stereotype.Repository;
 
-public interface ShoppingListRepo extends MongoRepository<ShoppingList, UUID> {
+@Repository
+public interface ShoppingListRepo extends MongoRepository<ShoppingList, String> {
 }

@@ -5,9 +5,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.List;
 import java.util.UUID;
 
-@Document(collection = "lists")
+@Document(collection = "ShoppingList")
 public record ShoppingList(
-        @Id UUID id,
+      @Id String id,
         String name,
         List<ShoppingListEntry> list
 ) { }

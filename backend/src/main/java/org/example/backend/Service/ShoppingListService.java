@@ -1,6 +1,7 @@
 package org.example.backend.Service;
 
 import org.example.backend.Model.ShoppingList;
+import org.example.backend.Repo.ShoppingListRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -8,13 +9,15 @@ import java.util.*;
 @Service
 public class ShoppingListService {
 
-    private final Map<UUID, ShoppingList> shoppingLists = new HashMap<>(); // In-Memory-Speicher
+    private final ShoppingListRepo shoppingListRepo;
 
-    // Erstellen einer neuen Einkaufsliste
+    public ShoppingListService(ShoppingListRepo shoppingListRepo) {
+        this.shoppingListRepo = shoppingListRepo;
+    }
 
-
-    // Abrufen aller Einkaufslisten
+    // Retrieve all shopping lists
     public List<ShoppingList> getAllShoppingLists() {
-        return new ArrayList<>(shoppingLists.values());
+        return shoppingListRepo.findAll(); // MongoDB handles fetching with generated _id
     }
 }
+
