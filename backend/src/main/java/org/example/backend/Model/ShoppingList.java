@@ -9,5 +9,5 @@ import java.util.UUID;
 public record ShoppingList(
         @Id UUID id,
         String name,
-        List<Item> list
+        List<ShoppingListEntry> list
 ) { }

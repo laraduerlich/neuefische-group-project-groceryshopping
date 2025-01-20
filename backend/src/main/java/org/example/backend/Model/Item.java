@@ -8,7 +8,6 @@ import java.util.UUID;
 public record Item(
         @Id UUID id,
         String name,
-        double quantity,
         boolean checked,
         Section section
 ) { }
