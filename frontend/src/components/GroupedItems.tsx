@@ -35,7 +35,7 @@ export default function GroupedItems({items}: ItemListProps){
                         <h2>{capitalizeFirstLetter(section)}:</h2>
                         <ul>
                             {groupedItems[section].map((item, index) => (
-                                <li key={index}>{item.quantity}{item.name}</li>
+                                <li key={index}>{item.quantity} {item.name}</li>
                             ))}
                         </ul>
                     </div>
