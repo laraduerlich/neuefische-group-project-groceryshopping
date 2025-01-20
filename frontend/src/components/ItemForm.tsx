@@ -8,14 +8,18 @@ type ItemFormProps = {
 export default function ItemForm({onSubmit}: ItemFormProps){
 
     const [name, setName] = useState("");
-    const [section, setSection] = useState<Section>("other");
-    const [quantity, setQuantity] = useState("0");
+    const [section, setSection] = useState<Section | null>(null);
+    const [quantity, setQuantity] = useState("1");
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault(); // Verhindert das Neuladen der Seite
+        if (!section) {
+            alert("Please select a section."); // Prompt user to select an option
+            return;
+        }
         onSubmit?.({name, section}, quantity); // Ruft den onSubmit-Handler auf
         setName("");
-        setSection("other");
+        setSection(null);
         setQuantity("1");
     };
 
@@ -46,10 +50,12 @@ export default function ItemForm({onSubmit}: ItemFormProps){
                 <div className="relative rounded-md border border-gray-300">
                     <select id="section"
                             name="section"
-                            value={section}
+                            value={section || ""}
                             onChange={(e) => setSection(e.target.value as Section)}
                             className="w-full p-2 text-sm rounded-md focus:outline-none dark:bg-gray-100 dark:text-gray-800 focus:dark:bg-gray-50 focus:dark:border-blue-600">
-                        {sections.map((section, index) => (<option key={index} value={section}>{section}</option>))}
+                        <option value="" disabled>Select a section</option>
+                        {sections.map((section, index) => (
+                            <option key={index} value={section}>{section}</option>))}
                     </select>
                 </div>
                 <button type="submit" className="w-full p-2 bg-blue-500 text-white rounded-md">Add</button>
