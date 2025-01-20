@@ -44,7 +44,7 @@ export default function ItemForm({onSubmit}: ItemFormProps){
                        onChange={(e) => setSection(e.target.value as Section)}>
                         {sections.map((section, index) => (<option key={index} value={section}>{section}</option>))}
                 </select>
-                <button>Add</button>
+                <button type="submit">Add</button>
             </form>
 
         </>
