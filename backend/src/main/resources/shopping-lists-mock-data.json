@@ -1,11 +1,11 @@
 [
   {
-	"id": "678e87db074d88d3c7d90ac0",
+	"id": "678e8da7074d88d3c7d90add",
 	"name": "Household Items",
 	"list": [
 	  {
 		"item": {
-		  "_id": null,
+		  "_id": "678e8ccf074d88d3c7d90acb",
 		  "name": "Paper Towels",
 		  "checked": false,
 		  "section": "HOUSEHOLD"
@@ -14,16 +14,16 @@
 	  },
 	  {
 		"item": {
-		  "_id": null,
+		  "_id": "678e8ccf074d88d3c7d90acc",
 		  "name": "Toothpaste",
-		  "checked": true,
+		  "checked": false,
 		  "section": "PERSONAL_CARE"
 		},
 		"quantity": 1
 	  },
 	  {
 		"item": {
-		  "_id": null,
+		  "_id": "678e8ccf074d88d3c7d90acd",
 		  "name": "Laundry Detergent",
 		  "checked": false,
 		  "section": "HOUSEHOLD"
@@ -33,12 +33,12 @@
 	]
   },
   {
-	"id": "678e87db074d88d3c7d90ac1",
+	"id": "678e8da7074d88d3c7d90ade",
 	"name": "Party Supplies",
 	"list": [
 	  {
 		"item": {
-		  "_id": null,
+		  "_id": "678e8ccf074d88d3c7d90ace",
 		  "name": "Chips",
 		  "checked": false,
 		  "section": "SNACKS"
@@ -47,7 +47,7 @@
 	  },
 	  {
 		"item": {
-		  "_id": null,
+		  "_id": "678e8ccf074d88d3c7d90acf",
 		  "name": "Soda",
 		  "checked": false,
 		  "section": "BEVERAGES"
@@ -56,7 +56,7 @@
 	  },
 	  {
 		"item": {
-		  "_id": null,
+		  "_id": "678e8ccf074d88d3c7d90ad0",
 		  "name": "Ice Cream",
 		  "checked": true,
 		  "section": "FROZEN"
@@ -66,12 +66,12 @@
 	]
   },
   {
-	"id": "678e87db074d88d3c7d90ac2",
+	"id": "678e8da7074d88d3c7d90adf",
 	"name": "Weekly Groceries",
 	"list": [
 	  {
 		"item": {
-		  "_id": null,
+		  "_id": "678e8ccf074d88d3c7d90ad1",
 		  "name": "Apples",
 		  "checked": false,
 		  "section": "FRUIT"
@@ -80,16 +80,16 @@
 	  },
 	  {
 		"item": {
-		  "_id": null,
+		  "_id": "678e8ccf074d88d3c7d90ad3",
 		  "name": "Milk",
-		  "checked": true,
+		  "checked": false,
 		  "section": "DAIRY"
 		},
 		"quantity": 2
 	  },
 	  {
 		"item": {
-		  "_id": null,
+		  "_id": "678e8ccf074d88d3c7d90ad4",
 		  "name": "Bread",
 		  "checked": false,
 		  "section": "BAKERY"
