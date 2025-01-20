@@ -1,7 +1,7 @@
-export default function Footer(){
+export default function Footer() {
     return (
-        <footer className="footer-main w-full">
-            Footer
+        <footer className="bg-gray-800 p-4 text-white">
+            <p className="text-center">Made with 🧡 by Altan, Chiara, Cora, and Lara</p>
         </footer>
-    )
+    );
 }

@@ -18,6 +18,6 @@ export default function ShoppingListPage(){
             <ItemForm onSubmit={handleSubmitNewItem}
             />
         </div>
-    )
+    );
 
 }
