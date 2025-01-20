@@ -34,7 +34,7 @@ export default function ItemForm({onSubmit}: ItemFormProps){
                            id="name"
                            name="name"
                            value={name}
-                           onChange={(e) => setName(e.target.value)}
+                           onChange={(e) => setName(e.target.value)} required
                            placeholder="Name"
                            className="w-full py-2 pl-3 text-sm rounded-md focus:outline-none dark:bg-gray-100 dark:text-gray-800 focus:dark:bg-gray-50 focus:dark:border-blue-600" />
                 </div>
