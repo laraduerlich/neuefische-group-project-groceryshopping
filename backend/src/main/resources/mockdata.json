@@ -1,0 +1,101 @@
+[
+  {
+	"id": "678e87db074d88d3c7d90ac0",
+	"name": "Household Items",
+	"list": [
+	  {
+		"item": {
+		  "_id": null,
+		  "name": "Paper Towels",
+		  "checked": false,
+		  "section": "HOUSEHOLD"
+		},
+		"quantity": 2
+	  },
+	  {
+		"item": {
+		  "_id": null,
+		  "name": "Toothpaste",
+		  "checked": true,
+		  "section": "PERSONAL_CARE"
+		},
+		"quantity": 1
+	  },
+	  {
+		"item": {
+		  "_id": null,
+		  "name": "Laundry Detergent",
+		  "checked": false,
+		  "section": "HOUSEHOLD"
+		},
+		"quantity": 1
+	  }
+	]
+  },
+  {
+	"id": "678e87db074d88d3c7d90ac1",
+	"name": "Party Supplies",
+	"list": [
+	  {
+		"item": {
+		  "_id": null,
+		  "name": "Chips",
+		  "checked": false,
+		  "section": "SNACKS"
+		},
+		"quantity": 3
+	  },
+	  {
+		"item": {
+		  "_id": null,
+		  "name": "Soda",
+		  "checked": false,
+		  "section": "BEVERAGES"
+		},
+		"quantity": 4
+	  },
+	  {
+		"item": {
+		  "_id": null,
+		  "name": "Ice Cream",
+		  "checked": true,
+		  "section": "FROZEN"
+		},
+		"quantity": 2
+	  }
+	]
+  },
+  {
+	"id": "678e87db074d88d3c7d90ac2",
+	"name": "Weekly Groceries",
+	"list": [
+	  {
+		"item": {
+		  "_id": null,
+		  "name": "Apples",
+		  "checked": false,
+		  "section": "FRUIT"
+		},
+		"quantity": 6
+	  },
+	  {
+		"item": {
+		  "_id": null,
+		  "name": "Milk",
+		  "checked": true,
+		  "section": "DAIRY"
+		},
+		"quantity": 2
+	  },
+	  {
+		"item": {
+		  "_id": null,
+		  "name": "Bread",
+		  "checked": false,
+		  "section": "BAKERY"
+		},
+		"quantity": 1
+	  }
+	]
+  }
+]
