@@ -9,7 +9,8 @@ public record Item(
         @Id UUID id,
         String name,
         double quantity,
-        Unit unit,
         boolean checked,
         Section section
 ) { }
+
+

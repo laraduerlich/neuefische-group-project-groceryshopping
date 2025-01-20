@@ -2,7 +2,7 @@ package org.example.backend.Model;
 
 public enum Section {
     FRUIT,         // All fresh Fruits
-    VEGETABLE,     // All fresh Vegetables
+    VEGETABLES,    // All fresh Vegetables
     DAIRY,         // Milk, Cheese, Yogurt
     MEAT,          // Meat, Fish, Poultry
     BAKERY,        // Bread, Pastries
