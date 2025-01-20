@@ -16,7 +16,7 @@ export default function ItemForm({onSubmit}: ItemFormProps){
         onSubmit?.({name, section}, quantity); // Ruft den onSubmit-Handler auf
         setName("");
         setSection("other");
-        setQuantity("0");
+        setQuantity("1");
     };
 
     const sections: Section[] = ["fruit", "vegetable", "dairy", "meat", "bakery", "beverages", "frozen", "snacks", "pantry", "household", "personal care", "other"];
