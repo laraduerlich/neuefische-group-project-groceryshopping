@@ -19,35 +19,33 @@ public class ShoppingListController {
         this.shoppingListService = shoppingListService;
     }
 
+    // 1. GET: Retrieve all ShoppingLists
     @GetMapping
     public ResponseEntity<List<ShoppingList>> getAllShoppingLists() {
         return ResponseEntity.ok(shoppingListService.findAllShoppingLists());
     }
 
-    @PostMapping
-    public ResponseEntity<ShoppingList> addShoppingList(@RequestBody @Valid CreateShoppingListDTO createShoppingListDTO) {
-        ShoppingList createdList = shoppingListService.createShoppingList(createShoppingListDTO);
-        return ResponseEntity.status(201).body(createdList); // Use 201 Created
-    }
-
-    // Eine explizite Liste anhand der ID holen
+    // 2. GET: Retrieve ShoppingList by id
     @GetMapping("/{id}")
     public ResponseEntity<ShoppingList> getShoppingListById(@PathVariable String id) {
         ShoppingList shoppingList = shoppingListService.findShoppingListById(id);
-        if (shoppingList == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(shoppingList);
+        return ResponseEntity.ok(shoppingList); // Exception handles null case
     }
 
+    // 3. POST: Create a new Shopping List
+    @PostMapping
+    public ResponseEntity<ShoppingList> addShoppingList(@RequestBody @Valid CreateShoppingListDTO createShoppingListDTO) {
+        ShoppingList createdList = shoppingListService.createShoppingList(createShoppingListDTO);
+        return ResponseEntity.status(201).body(createdList); // HTTP 201 Created
+    }
+
+    // 4. PUT: Edit ShoppingList by id
+    // TODO
+
+    // 5. DELETE: Delete ShoppingList by id
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteShoppingList(@PathVariable String id) {
-        boolean deleted = shoppingListService.deleteShoppingListById(id);
-        if (deleted) {
-            return ResponseEntity.noContent().build(); // 204 No Content
-        } else {
-            return ResponseEntity.notFound().build(); // 404 Not Found
-        }
+        shoppingListService.deleteShoppingListById(id); // Throws exception if not found
+        return ResponseEntity.noContent().build(); // HTTP 204 No Content
     }
-
 }
