@@ -22,17 +22,17 @@ public class ShoppingListService {
         this.shoppingListRepo = shoppingListRepo;
     }
 
-    // Logic for GET: Retrieve all Shopping Lists
+    // 1. Logic for GET: Retrieve all Shopping Lists
     public List<ShoppingList> findAllShoppingLists() {
         return shoppingListRepo.findAll(); // Retrieves all shopping lists from the database
     }
 
-    // Eine Liste anhand der ID holen
+    // 2. Eine Liste anhand der ID holen
     public ShoppingList findShoppingListById(String id) {
         return shoppingListRepo.findById(id).orElse(null);  // Gibt null zurück, wenn keine Liste gefunden wurde
     }
 
-    // Logic for POST: Create a new Shopping List
+    // 3. Logic for POST: Create a new Shopping List
     public ShoppingList createShoppingList(CreateShoppingListDTO createShoppingListDTO) {
         // Validate the input DTO
         validateShoppingListDTO(createShoppingListDTO);
@@ -61,29 +61,38 @@ public class ShoppingListService {
         return shoppingListRepo.save(shoppingList);
     }
 
-    // Validation logic for the CreateShoppingListDTO
-    private void validateShoppingListDTO(CreateShoppingListDTO dto) {
-        if (dto.name() == null || dto.name().isBlank()) {
-            throw new ValidationException("Shopping list name cannot be blank.");
+        public boolean deleteShoppingListById(String id) {
+            if (shoppingListRepo.existsById(id)) {
+                shoppingListRepo.deleteById(id);
+                return true;
+            } else {
+                return false; // Liste mit der ID existiert nicht
+            }
         }
 
-        if (dto.list() == null || dto.list().isEmpty()) {
-            throw new ValidationException("Shopping list must contain at least one item.");
-        }
+        // Validation logic for the CreateShoppingListDTO
+        private void validateShoppingListDTO(CreateShoppingListDTO dto) {
+            if (dto.name() == null || dto.name().isBlank()) {
+                throw new ValidationException("Shopping list name cannot be blank.");
+            }
 
-        for (CreateShoppingListEntryDTO entry : dto.list()) {
-            if (entry.item() == null) {
-                throw new ValidationException("Each shopping list entry must have an item.");
+            if (dto.list() == null || dto.list().isEmpty()) {
+                throw new ValidationException("Shopping list must contain at least one item.");
             }
-            if (entry.quantity() == null || entry.quantity() <= 0) {
-                throw new ValidationException("Quantity must be greater than 0.");
-            }
-            if (entry.item().name() == null || entry.item().name().isBlank()) {
-                throw new ValidationException("Item name cannot be blank.");
-            }
-            if (entry.item().section() == null) {
-                throw new ValidationException("Item section cannot be null.");
+
+            for (CreateShoppingListEntryDTO entry : dto.list()) {
+                if (entry.item() == null) {
+                    throw new ValidationException("Each shopping list entry must have an item.");
+                }
+                if (entry.quantity() == null || entry.quantity() <= 0) {
+                    throw new ValidationException("Quantity must be greater than 0.");
+                }
+                if (entry.item().name() == null || entry.item().name().isBlank()) {
+                    throw new ValidationException("Item name cannot be blank.");
+                }
+                if (entry.item().section() == null) {
+                    throw new ValidationException("Item section cannot be null.");
+                }
             }
         }
     }
-}

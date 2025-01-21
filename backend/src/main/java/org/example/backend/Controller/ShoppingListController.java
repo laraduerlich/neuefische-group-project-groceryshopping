@@ -39,4 +39,15 @@ public class ShoppingListController {
         }
         return ResponseEntity.ok(shoppingList);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteShoppingList(@PathVariable String id) {
+        boolean deleted = shoppingListService.deleteShoppingListById(id);
+        if (deleted) {
+            return ResponseEntity.noContent().build(); // 204 No Content
+        } else {
+            return ResponseEntity.notFound().build(); // 404 Not Found
+        }
+    }
+
 }
