@@ -1,11 +1,11 @@
 package org.example.backend.Controller;
 
+import jakarta.validation.Valid;
+import org.example.backend.DTO.CreateShoppingListDTO;
 import org.example.backend.Model.ShoppingList;
 import org.example.backend.Service.ShoppingListService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -15,12 +15,18 @@ public class ShoppingListController {
 
     private final ShoppingListService shoppingListService;
 
-    public ShoppingListController(ShoppingListService shoppingListService) { // Include ItemService
+    public ShoppingListController(ShoppingListService shoppingListService) {
         this.shoppingListService = shoppingListService;
     }
 
     @GetMapping
     public ResponseEntity<List<ShoppingList>> getAllShoppingLists() {
-        return ResponseEntity.ok(shoppingListService.getAllShoppingLists());
+        return ResponseEntity.ok(shoppingListService.findAllShoppingLists());
+    }
+
+    @PostMapping
+    public ResponseEntity<ShoppingList> addShoppingList(@RequestBody @Valid CreateShoppingListDTO createShoppingListDTO) {
+        ShoppingList createdList = shoppingListService.createShoppingList(createShoppingListDTO);
+        return ResponseEntity.status(201).body(createdList); // Use 201 Created
     }
 }

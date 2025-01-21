@@ -7,9 +7,8 @@ import jakarta.validation.constraints.Size;
 import org.example.backend.Model.Section;
 
 public record CreateItemDTO(
-        @NotBlank @Size(min = 2, max = 100) String name,
-        @Min(1) double quantity,
-        // @NotBlank boolean checked, // not really sure if we need it
-        @NotNull Section section
-) {
-}
+        @NotBlank
+        @Size(min = 2, max = 100) String name, // Validation for name
+        boolean checked,                       // No validation needed for boolean
+        @NotNull Section section               // Ensure section is not null
+) { }
