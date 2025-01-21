@@ -1,0 +1,86 @@
+[
+  {
+	"id": "678fabf9e82a503f8765371f",
+	"name": "Weekly Groceries",
+	"list": [
+	  {
+		"item": {
+		  "id": "afa8a75e-3e03-40e8-b794-e21ab60ccde0",
+		  "name": "Milk",
+		  "checked": false,
+		  "section": "DAIRY"
+		},
+		"quantity": 2
+	  },
+	  {
+		"item": {
+		  "id": "101f250e-eb5b-4324-be7e-f4e976426091",
+		  "name": "Bread",
+		  "checked": false,
+		  "section": "BAKERY"
+		},
+		"quantity": 1
+	  },
+	  {
+		"item": {
+		  "id": "0dfaf07c-cc74-488d-b637-eb6600d2097b",
+		  "name": "Eggs",
+		  "checked": false,
+		  "section": "DAIRY"
+		},
+		"quantity": 12
+	  },
+	  {
+		"item": {
+		  "id": "d3d9112b-ad47-42e6-8e02-dd2651a4987b",
+		  "name": "Apples",
+		  "checked": false,
+		  "section": "FRUIT"
+		},
+		"quantity": 6
+	  }
+	]
+  },
+  {
+	"id": "678faeb0ae3ae049b3e0032f",
+	"name": "Altans Groceries",
+	"list": [
+	  {
+		"item": {
+		  "id": "9baebd14-524c-42b1-a0ee-38d8b438a523",
+		  "name": "Tee",
+		  "checked": true,
+		  "section": "PANTRY"
+		},
+		"quantity": 4
+	  },
+	  {
+		"item": {
+		  "id": "6935e23c-8882-4a2c-8443-af13c2f31833",
+		  "name": "Cheese",
+		  "checked": false,
+		  "section": "DAIRY"
+		},
+		"quantity": 1
+	  },
+	  {
+		"item": {
+		  "id": "c80749b0-2ea5-4cb4-b0f6-6e53fa3e8040",
+		  "name": "Apples",
+		  "checked": false,
+		  "section": "FRUIT"
+		},
+		"quantity": 99
+	  },
+	  {
+		"item": {
+		  "id": "4bcd46ef-4539-4c9a-83cb-bd1707e37475",
+		  "name": "Banana",
+		  "checked": false,
+		  "section": "FRUIT"
+		},
+		"quantity": 27
+	  }
+	]
+  }
+]
