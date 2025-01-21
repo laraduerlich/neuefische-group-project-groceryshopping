@@ -9,6 +9,6 @@ import org.example.backend.Model.Section;
 public record CreateItemDTO(
         @NotBlank
         @Size(min = 2, max = 100) String name, // Validation for name
-        boolean checked,                       // No validation needed for boolean
+        @NotNull boolean checked,              // validation needed for boolean
         @NotNull Section section               // Ensure section is not null
 ) { }

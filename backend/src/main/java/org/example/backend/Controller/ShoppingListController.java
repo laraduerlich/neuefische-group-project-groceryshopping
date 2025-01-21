@@ -29,4 +29,14 @@ public class ShoppingListController {
         ShoppingList createdList = shoppingListService.createShoppingList(createShoppingListDTO);
         return ResponseEntity.status(201).body(createdList); // Use 201 Created
     }
+
+    // Eine explizite Liste anhand der ID holen
+    @GetMapping("/{id}")
+    public ResponseEntity<ShoppingList> getShoppingListById(@PathVariable String id) {
+        ShoppingList shoppingList = shoppingListService.findShoppingListById(id);
+        if (shoppingList == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(shoppingList);
+    }
 }

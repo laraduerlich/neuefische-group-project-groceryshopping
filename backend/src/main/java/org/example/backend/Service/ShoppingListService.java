@@ -27,6 +27,11 @@ public class ShoppingListService {
         return shoppingListRepo.findAll(); // Retrieves all shopping lists from the database
     }
 
+    // Eine Liste anhand der ID holen
+    public ShoppingList findShoppingListById(String id) {
+        return shoppingListRepo.findById(id).orElse(null);  // Gibt null zurück, wenn keine Liste gefunden wurde
+    }
+
     // Logic for POST: Create a new Shopping List
     public ShoppingList createShoppingList(CreateShoppingListDTO createShoppingListDTO) {
         // Validate the input DTO
