@@ -10,11 +10,14 @@ export default function HomePage(){
         { id: "5", name: "Projektideen" },
     ];
 
+    const handleButtonClick = () => {
+        alert(`Button clicked`);
+    };
 
     return (
         <div className="home-page">
             HomePage
-            <ShoppingLists lists={lists}/>
+            <ShoppingLists lists={lists} onButtonClick={handleButtonClick}/>
         </div>
     )
 }
