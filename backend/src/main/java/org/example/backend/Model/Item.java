@@ -1,8 +1,9 @@
 package org.example.backend.Model;
-import org.springframework.data.annotation.Id;
+
+import java.util.UUID;
 
 public record Item(
-    @Id String id,
+    UUID id,
     String name,
     boolean checked,
     Section section
