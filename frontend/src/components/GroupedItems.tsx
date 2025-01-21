@@ -1,4 +1,5 @@
 import {Item} from "../type/Item.tsx";
+import {useState} from "react";
 
 type ItemListProps = {
     items: {
@@ -14,9 +15,17 @@ function ListItemWithoutCheckbox(props: { item: { name: string; quantity: string
 }
 
 function ListItemWithCheckbox(props: { item: { name: string; quantity: string } }) {
+    const [isChecked, setIsChecked] = useState(false);
+
+    const handleCheckboxChange = () => {
+        setIsChecked(!isChecked);
+    };
+
     return <li className="flex items-center">
         <label className="flex items-center cursor-pointer relative" htmlFor="check-2">
             <input type="checkbox"
+                   checked={isChecked}
+                   onChange={handleCheckboxChange}
                    className="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-slate-800 checked:border-slate-800"
                    id="check-2"/>
             <span
@@ -30,7 +39,9 @@ function ListItemWithCheckbox(props: { item: { name: string; quantity: string } 
       </svg>
     </span>
         </label>
-        <label className="cursor-pointer ml-2 text-slate-600 text-sm" htmlFor="check-2">
+        <label className={`cursor-pointer ml-2 text-slate-600 text-sm ${
+            isChecked ? 'line-through' : ''
+        }`} htmlFor="check-2">
             {props.item.quantity} {props.item.name}
         </label>
     </li>
