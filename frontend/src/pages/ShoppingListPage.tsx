@@ -1,6 +1,7 @@
 import ItemForm from "../components/ItemForm.tsx";
 import {Item} from "../type/Item.tsx";
 import {useState} from "react";
+import GroupedItems from "../components/GroupedItems.tsx";
 
 export default function ShoppingListPage(){
 
@@ -17,6 +18,7 @@ export default function ShoppingListPage(){
             Shopping List Page
             <ItemForm onSubmit={handleSubmitNewItem}
             />
+            <GroupedItems items={items}/>
         </div>
     );
 

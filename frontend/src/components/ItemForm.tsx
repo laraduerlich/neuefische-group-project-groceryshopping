@@ -23,7 +23,7 @@ export default function ItemForm({onSubmit}: ItemFormProps){
         setQuantity("1");
     };
 
-    const sections: Section[] = ["fruit", "vegetable", "dairy", "meat", "bakery", "beverages", "frozen", "snacks", "pantry", "household", "personal care", "other"];
+    const sections: Section[] = ["fruit", "vegetables", "dairy", "meat", "bakery", "beverages", "frozen", "snacks", "pantry", "household", "personal care", "other"];
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
