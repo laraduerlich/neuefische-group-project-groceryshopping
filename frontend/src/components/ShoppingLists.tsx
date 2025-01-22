@@ -28,19 +28,20 @@ export default function ShoppingLists ({lists}: ShoppingListsProps)  {
 
     return (
         <>
-        <div>
+        <div className="flex justify-between items-center w-full">
             <input
                 type="text"
                 placeholder="Search for a list"
+                className="flex-grow p-2 border border-gray-300 rounded-md"
                 onChange={(e) => setSearchTerm(e.target.value)}
             />
-        </div>
             <button
                 onClick={() => handleNewShoppingListButtonClick()}
-                className="px-4 py-2 text-sm text-white bg-blue-500 rounded-md hover:bg-blue-600"
+                className="ml-4 px-4 py-2 text-sm text-white bg-blue-500 rounded-md hover:bg-blue-600"
             >
                 New shopping list
             </button>
+        </div>
             <div className="shopping-list space-y-4">
                 <ul className="space-y-2">
                     {filteredList.map((list) => (
