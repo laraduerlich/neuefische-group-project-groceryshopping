@@ -26,6 +26,15 @@ export default function GroupedItems({items}: ItemListProps){
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
+    if (!items.length) {
+        return (
+            <>
+                <h3>Items:</h3>
+                <p>No items to display.</p>
+            </>
+        );
+    }
+
     return(
         <>
             <h3>Items:</h3>
