@@ -33,5 +33,6 @@ jobs:
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          MONGO_URI: ${{ secrets.MONGO_URI }} # Pass the MONGO_URI secret
         working-directory: backend
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=laraduerlich_neuefische-group-project-groceryshopping-backend
