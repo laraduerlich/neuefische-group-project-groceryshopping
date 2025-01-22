@@ -10,4 +10,4 @@ public record ShoppingList(
     @Id String id,                     // Matches the "_id" field
     String name,
     List<ShoppingListEntry> list       // List of ShoppingListEntry
-) { }
+) {}
