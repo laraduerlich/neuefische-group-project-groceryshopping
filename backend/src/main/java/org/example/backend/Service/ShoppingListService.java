@@ -2,6 +2,7 @@ package org.example.backend.Service;
 
 import org.example.backend.DTO.CreateShoppingListDTO;
 import org.example.backend.DTO.CreateShoppingListEntryDTO;
+import org.example.backend.Exception.DuplicateResourceException;
 import org.example.backend.Exception.ResourceNotFoundException;
 import org.example.backend.Exception.ValidationException;
 import org.example.backend.Model.Item;
@@ -60,7 +61,50 @@ public class ShoppingListService {
     }
 
     // 4. Logic for PUT: Edit ShoppingList by id
-    // TODO
+    // 4. Logic for PUT: Edit ShoppingList by id
+    public ShoppingList updateShoppingList(String id, CreateShoppingListDTO updateShoppingListDTO) {
+        // Validate if the shopping list exists
+        ShoppingList existingList = shoppingListRepo.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Shopping list with ID " + id + " not found."));
+
+        // Check if the shopping list is in an invalid state for editing (e.g., archived)
+        if ("ARCHIVED".equals(existingList.status())) { // Assuming the ShoppingList has a 'status' field
+            throw new InvalidOperationException("Cannot edit an archived shopping list.");
+        }
+
+        // Validate the incoming DTO
+        validateShoppingListDTO(updateShoppingListDTO);
+
+        // Check for duplicate shopping list name
+        if (!existingList.name().equals(updateShoppingListDTO.name()) &&
+            shoppingListRepo.existsByName(updateShoppingListDTO.name())) {
+            throw new DuplicateResourceException("Shopping list with name '" + updateShoppingListDTO.name() + "' already exists.");
+        }
+
+        // Map DTO to updated ShoppingList
+        List<ShoppingListEntry> updatedEntries = updateShoppingListDTO.list().stream()
+            .map(entryDTO -> new ShoppingListEntry(
+                new Item(
+                    UUID.randomUUID(), // Generate a new ID for each updated item
+                    entryDTO.item().name(),
+                    entryDTO.item().checked(),
+                    entryDTO.item().section()
+                ),
+                entryDTO.quantity()
+            ))
+            .toList();
+
+        // Create a new ShoppingList record with updated values
+        ShoppingList updatedList = new ShoppingList(
+            existingList.id(), // Retain the original ID
+            updateShoppingListDTO.name(),
+            updatedEntries
+        );
+
+        // Save updated shopping list
+        return shoppingListRepo.save(updatedList);
+    }
+
 
     // 5. Logic for DELETE: Delete ShoppingList by id
     public void deleteShoppingListById(String id) {

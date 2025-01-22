@@ -40,7 +40,14 @@ public class ShoppingListController {
     }
 
     // 4. PUT: Edit ShoppingList by id
-    // TODO
+    @PutMapping("/{id}")
+    public ResponseEntity<ShoppingList> updateShoppingList(
+        @PathVariable String id,
+        @RequestBody @Valid CreateShoppingListDTO updateShoppingListDTO
+                                                          ) {
+        ShoppingList updatedList = shoppingListService.updateShoppingList(id, updateShoppingListDTO);
+        return ResponseEntity.ok(updatedList); // HTTP 200 OK
+    }
 
     // 5. DELETE: Delete ShoppingList by id
     @DeleteMapping("/{id}")
