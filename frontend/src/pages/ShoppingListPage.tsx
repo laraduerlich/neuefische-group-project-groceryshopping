@@ -15,6 +15,11 @@ export default function ShoppingListPage(){
         navigate("/shopping/" + id)
     };
 
+    const handleSaveAndGoHomeButtonClick = () => {
+        // Add POST API call here
+        navigate("/")
+    };
+
     const navigate = useNavigate();
 
     const handleSubmitNewItem = (item: Item, quantity: string) => {
@@ -37,12 +42,20 @@ export default function ShoppingListPage(){
             <ItemForm onSubmit={handleSubmitNewItem}
             />
             <GroupedItems items={items} checkbox={false}/>
+            <div className="flex justify-center">
+            <button
+                onClick={() => handleSaveAndGoHomeButtonClick()}
+                className="px-4 py-2 text-sm text-white bg-blue-500 rounded-md hover:bg-blue-600"
+            >
+                Save and go 🏠
+            </button>
             <button
                 onClick={() => handleGoShoppingButtonClick()}
-                className="px-4 py-2 text-sm text-white bg-blue-500 rounded-md hover:bg-blue-600"
+                className="ml-4 px-4 py-2 text-sm text-white bg-blue-500 rounded-md hover:bg-blue-600"
             >
                 Save and go 🛒
             </button>
+            </div>
         </div>
     );
 
