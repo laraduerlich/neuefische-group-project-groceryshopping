@@ -53,7 +53,7 @@ export default function ShoppingLists ({lists}: ShoppingListsProps)  {
                             onClick={() => handleGoShoppingButtonClick(list.id)}
                             className="px-4 py-2 text-sm text-white bg-blue-500 rounded-md hover:bg-blue-600"
                         >
-                            Button
+                            🛒
                         </button>
                     </li>
                 ))}
