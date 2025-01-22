@@ -1,42 +1,40 @@
 package org.example.backend.Service;
 
+import org.example.backend.DTO.CreateItemDTO;
+import org.example.backend.DTO.CreateShoppingListDTO;
+import org.example.backend.DTO.CreateShoppingListEntryDTO;
 import org.example.backend.Model.Item;
 import org.example.backend.Model.Section;
 import org.example.backend.Model.ShoppingList;
 import org.example.backend.Model.ShoppingListEntry;
 import org.example.backend.Repo.ShoppingListRepo;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class ShoppingListServiceTest {
 
-   // Mock Repo
-   private final ShoppingListRepo repo = mock(ShoppingListRepo.class);
+   private ShoppingListRepo repo; // Mocked repository
+   private ShoppingListService service; // Service being tested
 
-   // Service we are testing:
-   private final ShoppingListService service = new ShoppingListService(repo);
+   // Shared test data
+   private List<ShoppingList> mockShoppingLists;
+   private CreateShoppingListDTO mockCreateShoppingListDTO;
 
-   @Test
-   void findAllShoppingLists_shouldReturnEmptyList_WhenNoShoppingListsExist() {
-      when(repo.findAll()).thenReturn(Collections.emptyList());
-      List<ShoppingList> shoppingLists = service.findAllShoppingLists();
-      assertTrue(shoppingLists.isEmpty(), "The list should be empty");
-      Mockito.verify(repo, Mockito.times(1)).findAll();
-   }
+   @BeforeEach
+   void setUp() {
+      repo = mock(ShoppingListRepo.class);
+      service = new ShoppingListService(repo);
 
-   @Test
-   void findAllShoppingLists_shouldReturnAllShoppingLists_WhenListsExist() {
-      // Given
-      // Mock data setup
-      List<ShoppingList> expected = List.of(
+      // Mock shopping lists
+      mockShoppingLists = List.of(
           new ShoppingList(
               "678fabf9e82a503f8765371f",
               "Weekly Groceries",
@@ -50,42 +48,199 @@ class ShoppingListServiceTest {
                       1
                   )
                      )
-          ),
-          new ShoppingList(
-              "678faeb0ae3ae049b3e0032f",
-              "Monthly Supplies",
-              List.of(
-                  new ShoppingListEntry(
-                      new Item(UUID.fromString("b3c4386f-8882-4b29-ae12-9e1234c27a00"), "Pasta", true, Section.PANTRY),
-                      3
-                  ),
-                  new ShoppingListEntry(
-                      new Item(UUID.fromString("e2f9d7c3-51c7-4b1e-bcb7-6bd4a12fc4d7"), "Cheese", false, Section.DAIRY),
-                      1
-                  )
-                     )
           )
-                                           );
-      when(repo.findAll()).thenReturn(expected);
+                                 );
+
+      // Mock CreateShoppingListDTO
+      mockCreateShoppingListDTO = new CreateShoppingListDTO(
+          "Weekly Groceries",
+          List.of(
+              new CreateShoppingListEntryDTO(
+                  new CreateItemDTO("Milk", false, Section.DAIRY),
+                  2
+              ),
+              new CreateShoppingListEntryDTO(
+                  new CreateItemDTO("Bread", false, Section.BAKERY),
+                  1
+              )
+                 )
+      );
+   }
+
+   // ------------------- GET ALL SHOPPING LISTS -------------------
+   @Test
+   void findAllShoppingLists_shouldReturnEmptyList_WhenNoShoppingListsExist() {
+      // Given
+      when(repo.findAll()).thenReturn(Collections.emptyList());
 
       // When
       List<ShoppingList> result = service.findAllShoppingLists();
 
       // Then
-      assertEquals(expected, result, "The returned shopping lists should match the expected ones.");
-      Mockito.verify(repo, Mockito.times(1)).findAll();
-   }
-
-
-   @Test
-   void createShoppingList () {
+      assertTrue(result.isEmpty(), "The list should be empty.");
+      verify(repo, times(1)).findAll();
    }
 
    @Test
-   void updateShoppingList () {
+   void findAllShoppingLists_shouldReturnAllShoppingLists_WhenListsExist() {
+      // Given
+      when(repo.findAll()).thenReturn(mockShoppingLists);
+
+      // When
+      List<ShoppingList> result = service.findAllShoppingLists();
+
+      // Then
+      assertEquals(1, result.size(), "The number of shopping lists should match.");
+      assertEquals(mockShoppingLists, result, "The returned lists should match the mock data.");
+      verify(repo, times(1)).findAll();
+   }
+
+   // ------------------- GET SHOPPING LIST BY ID -------------------
+   @Test
+   void findShoppingListById_shouldReturnShoppingList_WhenIdExists() {
+      // Given
+      String id = "678fabf9e82a503f8765371f";
+      when(repo.findById(id)).thenReturn(Optional.of(mockShoppingLists.get(0)));
+
+      // When
+      ShoppingList result = service.findShoppingListById(id);
+
+      // Then
+      assertNotNull(result, "The result should not be null.");
+      assertEquals("Weekly Groceries", result.name(), "The name should match the expected shopping list.");
+      verify(repo, times(1)).findById(id);
    }
 
    @Test
-   void deleteShoppingListById () {
+   void findShoppingListById_shouldThrowException_WhenIdDoesNotExist() {
+      // Given
+      String id = "non-existent-id";
+      when(repo.findById(id)).thenReturn(Optional.empty());
+
+      // When & Then
+      Exception exception = assertThrows(RuntimeException.class, () -> service.findShoppingListById(id));
+      assertEquals("Shopping list with ID " + id + " not found.", exception.getMessage());
+      verify(repo, times(1)).findById(id);
+   }
+
+   // ------------------- CREATE SHOPPING LIST -------------------
+   @Test
+   void createShoppingList_shouldSaveAndReturnShoppingList() {
+      // Given
+      ShoppingList expected = new ShoppingList(
+          "678fabf9e82a503f8765371f",
+          mockCreateShoppingListDTO.name(),
+          mockCreateShoppingListDTO.list().stream()
+              .map(entry -> new ShoppingListEntry(
+                  new Item(UUID.randomUUID(), entry.item().name(), entry.item().checked(), entry.item().section()),
+                  entry.quantity()
+              ))
+              .toList()
+      );
+
+      when(repo.save(any(ShoppingList.class))).thenReturn(expected);
+
+      // When
+      ShoppingList result = service.createShoppingList(mockCreateShoppingListDTO);
+
+      // Then
+      assertNotNull(result, "The result should not be null.");
+      assertEquals(expected.name(), result.name(), "The names should match.");
+      verify(repo, times(1)).save(any(ShoppingList.class));
+   }
+
+   @Test
+   void createShoppingList_shouldThrowValidationException_WhenNameIsBlank() {
+      // Given
+      CreateShoppingListDTO invalidDTO = new CreateShoppingListDTO(
+          " ",
+          mockCreateShoppingListDTO.list()
+      );
+
+      // When & Then
+      Exception exception = assertThrows(RuntimeException.class, () -> service.createShoppingList(invalidDTO));
+      assertEquals("Shopping list name cannot be blank.", exception.getMessage());
+   }
+
+   // ------------------- UPDATE SHOPPING LIST -------------------
+   @Test
+   void updateShoppingList_shouldUpdateAndReturnShoppingList_WhenIdExists() {
+      // Given
+      String id = "678fabf9e82a503f8765371f";
+      ShoppingList existingList = mockShoppingLists.get(0);
+
+      CreateShoppingListDTO updateDTO = new CreateShoppingListDTO(
+          "Updated Groceries",
+          List.of(
+              new CreateShoppingListEntryDTO(
+                  new CreateItemDTO("Eggs", false, Section.DAIRY),
+                  12
+              )
+                 )
+      );
+
+      ShoppingList updatedList = new ShoppingList(
+          id,
+          updateDTO.name(),
+          updateDTO.list().stream()
+              .map(entry -> new ShoppingListEntry(
+                  new Item(UUID.randomUUID(), entry.item().name(), entry.item().checked(), entry.item().section()),
+                  entry.quantity()
+              ))
+              .toList()
+      );
+
+      when(repo.findById(id)).thenReturn(Optional.of(existingList));
+      when(repo.save(any(ShoppingList.class))).thenReturn(updatedList);
+
+      // When
+      ShoppingList result = service.updateShoppingList(id, updateDTO);
+
+      // Then
+      assertEquals(updatedList.name(), result.name(), "Updated names should match.");
+      verify(repo, times(1)).findById(id);
+      verify(repo, times(1)).save(any(ShoppingList.class));
+   }
+
+   @Test
+   void updateShoppingList_shouldThrowException_WhenIdDoesNotExist() {
+      // Given
+      String id = "non-existent-id";
+      CreateShoppingListDTO updateDTO = new CreateShoppingListDTO("Updated Groceries", mockCreateShoppingListDTO.list());
+
+      when(repo.findById(id)).thenReturn(Optional.empty());
+
+      // When & Then
+      Exception exception = assertThrows(RuntimeException.class, () -> service.updateShoppingList(id, updateDTO));
+      assertEquals("Shopping list with ID " + id + " not found.", exception.getMessage());
+      verify(repo, times(1)).findById(id);
+   }
+
+   // ------------------- DELETE SHOPPING LIST -------------------
+   @Test
+   void deleteShoppingListById_shouldDeleteShoppingList_WhenIdExists() {
+      // Given
+      String id = "678fabf9e82a503f8765371f";
+      when(repo.existsById(id)).thenReturn(true);
+
+      // When
+      service.deleteShoppingListById(id);
+
+      // Then
+      verify(repo, times(1)).existsById(id);
+      verify(repo, times(1)).deleteById(id);
+   }
+
+   @Test
+   void deleteShoppingListById_shouldThrowException_WhenIdDoesNotExist() {
+      // Given
+      String id = "non-existent-id";
+      when(repo.existsById(id)).thenReturn(false);
+
+      // When & Then
+      Exception exception = assertThrows(RuntimeException.class, () -> service.deleteShoppingListById(id));
+      assertEquals("Shopping list with ID " + id + " not found.", exception.getMessage());
+      verify(repo, times(1)).existsById(id);
+      verify(repo, never()).deleteById(any());
    }
 }
