@@ -8,6 +8,8 @@ export default function ShoppingListPage(){
 
     const [items, setItems] = useState<{item: Item, quantity: string}[]>([]);
 
+    const [shoppingListName, setShoppingListName] = useState("");
+
     const handleGoShoppingButtonClick = () => {
         const id: string = ""  // Get this from the POST API call
         navigate("/shopping/" + id)
@@ -23,6 +25,15 @@ export default function ShoppingListPage(){
     return (
         <div className="shopping-list-page">
             Shopping List Page
+            <div className="relative rounded-md border border-gray-300">
+                <input type="text"
+                       id="shoppingListName"
+                       name="shoppingListName"
+                       value={shoppingListName}
+                       onChange={(e) => setShoppingListName(e.target.value)} required
+                       placeholder="Shopping List Name"
+                       className="w-full py-2 pl-3 text-sm rounded-md focus:outline-none dark:bg-gray-100 dark:text-gray-800 focus:dark:bg-gray-50 focus:dark:border-blue-600"/>
+            </div>
             <ItemForm onSubmit={handleSubmitNewItem}
             />
             <GroupedItems items={items} checkbox={false}/>
