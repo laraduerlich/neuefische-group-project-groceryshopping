@@ -15,7 +15,7 @@ export default function ShoppingLists ({lists, onButtonClick}: ShoppingListsProp
                 {lists.map((list) => (
                     <li
                         key={list.id}
-                        className="flex items-center justify-between p-4 bg-gray-100 rounded-md shadow-sm hover:bg-gray-200"
+                        className="flex items-center justify-between p-4 border border-gray-300 rounded-md bg-gray-100 shadow-sm hover:bg-gray-200"
                     >
                         <span className="text-sm font-medium text-gray-800">{list.name}</span>
                         <button

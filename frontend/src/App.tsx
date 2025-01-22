@@ -14,8 +14,8 @@ function App() {
             <div id="page-body-main" className="flex-grow">
                 <Routes>
                     <Route path={"/"} element={<HomePage />} />
-                    <Route path={"/shoppinglist"} element={<ShoppingListPage />} />
-                    <Route path={"/shopping"} element={<ShoppingPage />} />
+                    <Route path={"/shoppinglist/:id"} element={<ShoppingListPage />} />
+                    <Route path={"/shopping/:id"} element={<ShoppingPage />} />
                 </Routes>
             </div>
             <Footer />
