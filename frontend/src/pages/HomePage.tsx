@@ -1,5 +1,4 @@
 import ShoppingLists from "../components/ShoppingLists.tsx";
-import {useNavigate, useParams} from "react-router-dom";
 
 export default function HomePage(){
 
@@ -11,17 +10,11 @@ export default function HomePage(){
         { id: "5", name: "Projektideen" },
     ];
 
-    const navigate = useNavigate();
-    const params = useParams();
-
-    const handleButtonClick = () => {
-        navigate("/shoppinglist/" + params.id)
-    };
 
     return (
         <div className="home-page">
             HomePage
-            <ShoppingLists lists={lists} onButtonClick={handleButtonClick}/>
+            <ShoppingLists lists={lists}/>
         </div>
     )
 }
