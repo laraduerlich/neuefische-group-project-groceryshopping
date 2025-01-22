@@ -1,3 +1,4 @@
+import {useState} from "react";
 
 type ShoppingListsProps = {
     lists: {
@@ -9,10 +10,23 @@ type ShoppingListsProps = {
 
 export default function ShoppingLists ({lists, onButtonClick}: ShoppingListsProps)  {
 
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const filteredList = lists.filter((shoppingList) =>
+        shoppingList.name.toLowerCase().includes(searchTerm.toLowerCase()));
+
     return (
+        <>
+        <div>
+            <input
+                type="text"
+                placeholder="Search for a list"
+                onChange={(e) => setSearchTerm(e.target.value)}
+            />
+        </div>
         <div className="shopping-list space-y-4">
             <ul className="space-y-2">
-                {lists.map((list) => (
+                {filteredList.map((list) => (
                     <li
                         key={list.id}
                         className="flex items-center justify-between p-4 border border-gray-300 rounded-md bg-gray-100 shadow-sm hover:bg-gray-200"
@@ -28,5 +42,6 @@ export default function ShoppingLists ({lists, onButtonClick}: ShoppingListsProp
                 ))}
             </ul>
         </div>
+        </>
     )
 }
