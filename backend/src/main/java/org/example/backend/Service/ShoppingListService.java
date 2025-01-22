@@ -3,6 +3,7 @@ package org.example.backend.Service;
 import org.example.backend.DTO.CreateShoppingListDTO;
 import org.example.backend.DTO.CreateShoppingListEntryDTO;
 import org.example.backend.Exception.DuplicateResourceException;
+import org.example.backend.Exception.InvalidOperationException;
 import org.example.backend.Exception.ResourceNotFoundException;
 import org.example.backend.Exception.ValidationException;
 import org.example.backend.Model.Item;
@@ -61,16 +62,10 @@ public class ShoppingListService {
     }
 
     // 4. Logic for PUT: Edit ShoppingList by id
-    // 4. Logic for PUT: Edit ShoppingList by id
     public ShoppingList updateShoppingList(String id, CreateShoppingListDTO updateShoppingListDTO) {
         // Validate if the shopping list exists
         ShoppingList existingList = shoppingListRepo.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Shopping list with ID " + id + " not found."));
-
-        // Check if the shopping list is in an invalid state for editing (e.g., archived)
-        if ("ARCHIVED".equals(existingList.status())) { // Assuming the ShoppingList has a 'status' field
-            throw new InvalidOperationException("Cannot edit an archived shopping list.");
-        }
 
         // Validate the incoming DTO
         validateShoppingListDTO(updateShoppingListDTO);
@@ -104,7 +99,6 @@ public class ShoppingListService {
         // Save updated shopping list
         return shoppingListRepo.save(updatedList);
     }
-
 
     // 5. Logic for DELETE: Delete ShoppingList by id
     public void deleteShoppingListById(String id) {
