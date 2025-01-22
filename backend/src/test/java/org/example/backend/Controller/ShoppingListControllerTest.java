@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -33,31 +32,12 @@ class ShoppingListControllerTest {
    @Autowired
    private ShoppingListRepo shoppingListRepo;
 
-   private List<ShoppingList> mockShoppingLists;
    private CreateShoppingListDTO mockCreateShoppingListDTO;
 
    @BeforeEach
    void setUp() {
       // Clear the database before each test
       shoppingListRepo.deleteAll();
-
-      // Mock shopping lists
-      mockShoppingLists = List.of(
-          new ShoppingList(
-              "678fabf9e82a503f8765371f",
-              "Weekly Groceries",
-              List.of(
-                  new ShoppingListEntry(
-                      new Item(UUID.fromString("afa8a75e-3e03-40e8-b794-e21ab60ccde0"), "Milk", false, Section.DAIRY),
-                      2
-                  ),
-                  new ShoppingListEntry(
-                      new Item(UUID.fromString("101f250e-eb5b-4324-be7e-f4e976426091"), "Bread", false, Section.BAKERY),
-                      1
-                  )
-                     )
-          )
-                                 );
 
       // Mock CreateShoppingListDTO
       mockCreateShoppingListDTO = new CreateShoppingListDTO(
@@ -75,8 +55,49 @@ class ShoppingListControllerTest {
       );
    }
 
-   // ------------------- GET ALL SHOPPING LISTS -------------------
-   @DirtiesContext
+   // ------------------- Utility Methods -------------------
+
+   private void saveMockShoppingList() {
+      shoppingListRepo.save(new ShoppingList(
+          UUID.randomUUID().toString(),
+          mockCreateShoppingListDTO.name(),
+          mockCreateShoppingListDTO.list().stream()
+              .map(entry -> new ShoppingListEntry(
+                  new Item(UUID.randomUUID(), entry.item().name(), entry.item().checked(), entry.item().section()),
+                  entry.quantity()
+              ))
+              .toList()
+      ));
+   }
+
+   private String getMockCreateShoppingListPayload() {
+      return """
+            {
+              "name": "Weekly Groceries",
+              "list": [
+                {
+                  "item": {
+                    "name": "Milk",
+                    "checked": false,
+                    "section": "DAIRY"
+                  },
+                  "quantity": 2
+                },
+                {
+                  "item": {
+                    "name": "Bread",
+                    "checked": false,
+                    "section": "BAKERY"
+                  },
+                  "quantity": 1
+                }
+              ]
+            }
+            """;
+   }
+
+   // 1. ------------------- GET ALL SHOPPING LISTS -------------------
+
    @Test
    void getAllShoppingLists_shouldReturnEmptyList_whenRepositoryIsEmpty() throws Exception {
       mockMvc.perform(get("/api/shoppinglists"))
@@ -84,13 +105,23 @@ class ShoppingListControllerTest {
           .andExpect(content().json("[]"));
    }
 
-   // ------------------- GET SHOPPING LIST BY ID -------------------
+   @Test
+   void getAllShoppingLists_shouldReturnListOfShoppingLists_whenRepositoryHasData() throws Exception {
+      saveMockShoppingList();
+
+      mockMvc.perform(get("/api/shoppinglists"))
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$.length()").value(1))
+          .andExpect(jsonPath("$[0].name").value("Weekly Groceries"));
+   }
+
+   // 2. ------------------- GET SHOPPING LIST BY ID -------------------
+
    @Test
    void getShoppingListById_shouldReturnShoppingList_WhenIdExists() throws Exception {
-      // Given
-      ShoppingList savedList = shoppingListRepo.save(mockShoppingLists.get(0));
+      saveMockShoppingList();
+      ShoppingList savedList = shoppingListRepo.findAll().get(0);
 
-      // When & Then
       mockMvc.perform(get("/api/shoppinglists/{id}", savedList.id())
                           .accept(MediaType.APPLICATION_JSON))
           .andExpect(status().isOk())
@@ -107,34 +138,13 @@ class ShoppingListControllerTest {
           .andExpect(status().isNotFound());
    }
 
-   // ------------------- CREATE SHOPPING LIST -------------------
+   // 3. ------------------- CREATE SHOPPING LIST -------------------
+
    @Test
    void addShoppingList_shouldCreateAndReturnShoppingList() throws Exception {
       mockMvc.perform(post("/api/shoppinglists")
                           .contentType(MediaType.APPLICATION_JSON)
-                          .content("""
-                        {
-                          "name": "Weekly Groceries",
-                          "list": [
-                            {
-                              "item": {
-                                "name": "Milk",
-                                "checked": false,
-                                "section": "DAIRY"
-                              },
-                              "quantity": 2
-                            },
-                            {
-                              "item": {
-                                "name": "Bread",
-                                "checked": false,
-                                "section": "BAKERY"
-                              },
-                              "quantity": 1
-                            }
-                          ]
-                        }
-                        """))
+                          .content(getMockCreateShoppingListPayload()))
           .andExpect(status().isCreated())
           .andExpect(jsonPath("$.name").value("Weekly Groceries"));
    }
@@ -143,34 +153,34 @@ class ShoppingListControllerTest {
    void addShoppingList_shouldReturnBadRequest_WhenInputIsInvalid() throws Exception {
       mockMvc.perform(post("/api/shoppinglists")
                           .contentType(MediaType.APPLICATION_JSON)
-                          .content("{}")) // Invalid JSON
+                          .content("{}"))
           .andExpect(status().isBadRequest());
    }
 
-   // ------------------- EDIT SHOPPING LIST -------------------
+   // 4. ------------------- EDIT SHOPPING LIST -------------------
+
    @Test
    void updateShoppingList_shouldUpdateAndReturnShoppingList() throws Exception {
-      // Given
-      ShoppingList savedList = shoppingListRepo.save(mockShoppingLists.get(0));
+      saveMockShoppingList();
+      ShoppingList savedList = shoppingListRepo.findAll().get(0);
 
-      // When & Then
       mockMvc.perform(put("/api/shoppinglists/{id}", savedList.id())
                           .contentType(MediaType.APPLICATION_JSON)
                           .content("""
+                    {
+                      "name": "Updated Weekly Groceries",
+                      "list": [
                         {
-                          "name": "Updated Weekly Groceries",
-                          "list": [
-                            {
-                              "item": {
-                                "name": "Eggs",
-                                "checked": false,
-                                "section": "DAIRY"
-                              },
-                              "quantity": 12
-                            }
-                          ]
+                          "item": {
+                            "name": "Eggs",
+                            "checked": false,
+                            "section": "DAIRY"
+                          },
+                          "quantity": 12
                         }
-                        """))
+                      ]
+                    }
+                    """))
           .andExpect(status().isOk())
           .andExpect(jsonPath("$.name").value("Updated Weekly Groceries"))
           .andExpect(jsonPath("$.list[0].item.name").value("Eggs"))
@@ -182,30 +192,30 @@ class ShoppingListControllerTest {
       mockMvc.perform(put("/api/shoppinglists/{id}", "non-existent-id")
                           .contentType(MediaType.APPLICATION_JSON)
                           .content("""
+                    {
+                      "name": "Updated Weekly Groceries",
+                      "list": [
                         {
-                          "name": "Updated Weekly Groceries",
-                          "list": [
-                            {
-                              "item": {
-                                "name": "Eggs",
-                                "checked": false,
-                                "section": "DAIRY"
-                              },
-                              "quantity": 12
-                            }
-                          ]
+                          "item": {
+                            "name": "Eggs",
+                            "checked": false,
+                            "section": "DAIRY"
+                          },
+                          "quantity": 12
                         }
-                        """))
+                      ]
+                    }
+                    """))
           .andExpect(status().isNotFound());
    }
 
-   // ------------------- DELETE SHOPPING LIST -------------------
+   // 5. ------------------- DELETE SHOPPING LIST -------------------
+
    @Test
    void deleteShoppingList_shouldDeleteShoppingList_WhenIdExists() throws Exception {
-      // Given
-      ShoppingList savedList = shoppingListRepo.save(mockShoppingLists.get(0));
+      saveMockShoppingList();
+      ShoppingList savedList = shoppingListRepo.findAll().get(0);
 
-      // When & Then
       mockMvc.perform(delete("/api/shoppinglists/{id}", savedList.id()))
           .andExpect(status().isNoContent());
    }

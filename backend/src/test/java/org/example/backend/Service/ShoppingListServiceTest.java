@@ -67,7 +67,7 @@ class ShoppingListServiceTest {
       );
    }
 
-   // ------------------- GET ALL SHOPPING LISTS -------------------
+   // 1. ------------------- GET ALL SHOPPING LISTS -------------------
    @Test
    void findAllShoppingLists_shouldReturnEmptyList_WhenNoShoppingListsExist() {
       // Given
@@ -95,7 +95,7 @@ class ShoppingListServiceTest {
       verify(repo, times(1)).findAll();
    }
 
-   // ------------------- GET SHOPPING LIST BY ID -------------------
+   // 2. ------------------- GET SHOPPING LIST BY ID -------------------
    @Test
    void findShoppingListById_shouldReturnShoppingList_WhenIdExists() {
       // Given
@@ -123,7 +123,7 @@ class ShoppingListServiceTest {
       verify(repo, times(1)).findById(id);
    }
 
-   // ------------------- CREATE SHOPPING LIST -------------------
+   // 3. ------------------- CREATE SHOPPING LIST -------------------
    @Test
    void createShoppingList_shouldSaveAndReturnShoppingList() {
       // Given
@@ -162,7 +162,7 @@ class ShoppingListServiceTest {
       assertEquals("Shopping list name cannot be blank.", exception.getMessage());
    }
 
-   // ------------------- UPDATE SHOPPING LIST -------------------
+   // 4. ------------------- UPDATE SHOPPING LIST -------------------
    @Test
    void updateShoppingList_shouldUpdateAndReturnShoppingList_WhenIdExists() {
       // Given
@@ -216,7 +216,7 @@ class ShoppingListServiceTest {
       verify(repo, times(1)).findById(id);
    }
 
-   // ------------------- DELETE SHOPPING LIST -------------------
+   // 5. ------------------- DELETE SHOPPING LIST -------------------
    @Test
    void deleteShoppingListById_shouldDeleteShoppingList_WhenIdExists() {
       // Given
