@@ -1,6 +1,6 @@
 import ItemForm from "../components/ItemForm.tsx";
 import {Item} from "../type/Item.tsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import GroupedItems from "../components/GroupedItems.tsx";
 import {useNavigate} from "react-router-dom";
 
@@ -21,11 +21,14 @@ export default function ShoppingListPage(){
         // Add POST API call here
         navigate("/")
     };
-    
+
     const handleSubmitNewItem = (item: Item, quantity: string) => {
         setItems([...items, {item, quantity}]);
-        console.log(items);
     };
+
+    useEffect(() => {
+        console.log(items);
+    }, [items]);  // every time the state of items change, the items will be logged
 
     return (
         <div className="shopping-list-page">
