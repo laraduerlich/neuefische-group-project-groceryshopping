@@ -2,7 +2,7 @@ import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 
 type ShoppingListsProps = {
-    lists: {
+    lists?: {
         id: string,
         name: string
     }[],
