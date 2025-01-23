@@ -1,0 +1,42 @@
+{
+  "id": "678fabf9e82a503f8765371f",
+  "name": "Weekly Groceries",
+  "list": [
+	{
+	  "item": {
+		"id": "afa8a75e-3e03-40e8-b794-e21ab60ccde0",
+		"name": "Milk",
+		"checked": false,
+		"section": "DAIRY"
+	  },
+	  "quantity": "2"
+	},
+	{
+	  "item": {
+		"id": "101f250e-eb5b-4324-be7e-f4e976426091",
+		"name": "Bread",
+		"checked": false,
+		"section": "BAKERY"
+	  },
+	  "quantity": "1"
+	},
+	{
+	  "item": {
+		"id": "0dfaf07c-cc74-488d-b637-eb6600d2097b",
+		"name": "Eggs",
+		"checked": false,
+		"section": "DAIRY"
+	  },
+	  "quantity": "12"
+	},
+	{
+	  "item": {
+		"id": "d3d9112b-ad47-42e6-8e02-dd2651a4987b",
+		"name": "Apples",
+		"checked": false,
+		"section": "FRUIT"
+	  },
+	  "quantity": "6"
+	}
+  ]
+},
