@@ -18,7 +18,7 @@ function ListItemWithCheckbox(props: { item: { name: string; quantity: string } 
 
 
     const handleCheckboxChange = () => {
-        setIsChecked(!isChecked);
+        setIsChecked((prev) => !prev);
     };
 
     const inputId = `checkbox-${props.item.name}`;
