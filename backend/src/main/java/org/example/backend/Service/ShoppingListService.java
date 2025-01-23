@@ -108,7 +108,7 @@ public class ShoppingListService {
     }
 
     // HELPER FUNCTION: Validation logic for the CreateShoppingListDTO
-     void validateShoppingListDTO(CreateShoppingListDTO dto) {
+    void validateShoppingListDTO(CreateShoppingListDTO dto) {
         if (dto.name() == null || dto.name().isBlank()) {
             throw new ValidationException("Shopping list name cannot be blank.");
         }
@@ -118,8 +118,8 @@ public class ShoppingListService {
         }
 
         for (CreateShoppingListEntryDTO entry : dto.list()) {
-            if (entry.item() == null) {
-                throw new ValidationException("Each shopping list entry must have an item.");
+            if (entry == null || entry.item() == null) { // Combine null checks
+                throw new ValidationException("Each shopping list entry must have a valid item.");
             }
             if (entry.quantity() == null || entry.quantity() <= 0) {
                 throw new ValidationException("Quantity must be greater than 0.");
@@ -133,3 +133,4 @@ public class ShoppingListService {
         }
     }
 }
+

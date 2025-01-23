@@ -247,7 +247,7 @@ class ShoppingListServiceTest {
       verify(repo, never()).deleteById(any());
    }
 
-   // test validations
+   /// 6. ------------------- VALIDATIONS -------------------
 
    @Test
    void validateShoppingListDTO_shouldThrowValidationException_WhenNameIsNull() {
@@ -277,23 +277,21 @@ class ShoppingListServiceTest {
    void validateShoppingListDTO_shouldThrowValidationException_WhenEntryItemIsNull() {
       // Given
       CreateShoppingListDTO invalidDTO = new CreateShoppingListDTO("Weekly Groceries", List.of(
-          new CreateShoppingListEntryDTO(null, 2)
+          new CreateShoppingListEntryDTO(null, 2) // Entry.item is null
                                                                                               ));
 
       // When & Then
       Exception exception = assertThrows(
           ValidationException.class,
           () -> service.validateShoppingListDTO(invalidDTO));
-      assertEquals("Each shopping list entry must have an item.", exception.getMessage());
+      assertEquals("Each shopping list entry must have a valid item.", exception.getMessage());
    }
-
-   // 6. ------------------- VALIDATIONS -------------------
 
    @Test
    void validateShoppingListDTO_shouldThrowValidationException_WhenQuantityIsInvalid() {
       // Given
       CreateShoppingListDTO invalidDTO = new CreateShoppingListDTO("Weekly Groceries", List.of(
-          new CreateShoppingListEntryDTO(new CreateItemDTO("Milk", false, Section.DAIRY), 0)
+          new CreateShoppingListEntryDTO(new CreateItemDTO("Milk", false, Section.DAIRY), 0) // Invalid quantity
                                                                                               ));
 
       // When & Then
@@ -322,7 +320,7 @@ class ShoppingListServiceTest {
           "Duplicate Name",
           List.of(new CreateShoppingListEntryDTO(
               new CreateItemDTO("Milk", false, Section.DAIRY),
-              2 // Quantity greater than 0
+              2 // Valid quantity
           ))
       );
       when(repo.existsByName("Duplicate Name")).thenReturn(true);
@@ -335,5 +333,4 @@ class ShoppingListServiceTest {
 
       assertEquals("Shopping list with name 'Duplicate Name' already exists.", exception.getMessage());
    }
-
 }
