@@ -9,7 +9,7 @@ type ShoppingListsProps = {
     //onButtonClick: (item: { id: string, name: string }) => void
 }
 
-export default function ShoppingLists ({lists}: ShoppingListsProps)  {
+export default function ShoppingLists ({ lists = [] }: ShoppingListsProps) {
 
     const [searchTerm, setSearchTerm] = useState('');
 
