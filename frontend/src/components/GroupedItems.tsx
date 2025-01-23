@@ -78,12 +78,13 @@ export default function GroupedItems({items, checkbox}: ItemListProps) {
                     <div key={section}>
                         <h2>{capitalizeFirstLetter(section)}:</h2>
                         <ul>
-                            {groupedItems[section].map((item, index) => {
-                                if (checkbox) {
-                                    return <ListItemWithCheckbox key={index} item={item} />
-                            } else {
-                                return <ListItemWithoutCheckbox key={index} item={item}/>}
-                            })}
+{groupedItems[section].map((item) =>
+    checkbox ? (
+        <ListItemWithCheckbox key={item.name} item={item} />
+    ) : (
+        <ListItemWithoutCheckbox key={item.name} item={item} />
+    )
+)}
 
                         </ul>
                     </div>
