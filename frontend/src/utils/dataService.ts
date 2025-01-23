@@ -20,12 +20,8 @@ const processList = (list: ShoppingList): ShoppingList => ({
 // Get all shopping lists
 export const getAllShoppingLists = async (): Promise<ShoppingList[]> => {
     try {
-        // Uncomment the real API call when the backend is ready
-        // const response = await axios.get('/api/shoppinglists');
-        // const data: ShoppingList[] = response.data;
-
-        // Temporary use of mock data
-        const data: ShoppingList[] = mockShoppingLists;
+        const response = await axios.get('/api/shoppinglists');
+        const data: ShoppingList[] = response.data;
 
         return data.map(processList); // Process the list to ensure fallback values
     } catch (error) {
