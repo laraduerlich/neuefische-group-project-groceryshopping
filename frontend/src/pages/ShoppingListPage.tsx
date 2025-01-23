@@ -1,24 +1,49 @@
 import ItemForm from "../components/ItemForm.tsx";
-import {Item} from "../type/Item.tsx";
 import {useEffect, useState} from "react";
 import GroupedItems from "../components/GroupedItems.tsx";
 import {useNavigate} from "react-router-dom";
+import {createShoppingList} from "../utils/dataService.ts";
+import {ShoppingList, Item} from "../type/Types.ts";
 
 export default function ShoppingListPage(){
 
     const [items, setItems] = useState<{item: Item, quantity: string}[]>([]);
 
     const [shoppingListName, setShoppingListName] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
+    const [listId, setListId] = useState<string | undefined>("")
+    const [error, setError] = useState<string | null>(null);
+
 
     const navigate = useNavigate();
 
+    const postApiCall: () => Promise<void> = async () => {
+        const newList: ShoppingList = {
+            name: shoppingListName,
+            list: items
+        }
+        try {
+            setIsLoading(true);
+            const createdList = await createShoppingList(newList)
+            setListId(createdList.id);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Unknown error');
+        } finally {
+            setIsLoading(false);
+        }
+        console.log(isLoading)
+        console.log(listId)
+        console.log(error)
+    }
+
     const handleGoShoppingButtonClick = () => {
-        const id: string = ""  // Get this from the POST API call
+       const id = postApiCall
         navigate("/shopping/" + id)
     };
 
     const handleSaveAndGoHomeButtonClick = () => {
-        // Add POST API call here
+        const id = postApiCall
+        console.log(id)
         navigate("/")
     };
 

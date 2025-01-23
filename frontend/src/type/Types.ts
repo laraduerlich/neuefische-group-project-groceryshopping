@@ -15,9 +15,9 @@ export enum Section {
 
 // Item type matches the backend's Item model
 export type Item = {
-    id: string; // UUID from the backend
+    id?: string; // UUID from the backend
     name: string;
-    checked: boolean;
+    checked?: boolean;
     section: Section; // Section is now strongly typed
 };
 
@@ -29,7 +29,7 @@ export type ShoppingListEntry = {
 
 // ShoppingList type matches the backend's ShoppingList model
 export type ShoppingList = {
-    id: string; // MongoDB `_id` field
+    id?: string; // MongoDB `_id` field
     name: string; // Name of the shopping list
     list: ShoppingListEntry[]; // Array of entries in the list
 };

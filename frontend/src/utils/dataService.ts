@@ -93,18 +93,9 @@ export const createShoppingList = async (
     newList: Omit<ShoppingList, "id">
 ): Promise<ShoppingList> => {
     try {
-        // Uncomment the real API call when the backend is ready
-        // const response = await axios.post('/api/shoppinglists', newList);
-        // const data: ShoppingList = response.data;
-        // return processList(data);
-
-        // Simulate creation in mock data (temporary)
-        const createdList = processList({
-            ...newList,
-            id: `${Date.now()}`, // Generate a fake ID for mock data
-        });
-        mockShoppingLists.push(createdList);
-        return createdList;
+        const response = await axios.post('/api/shoppinglists', newList);
+        const data: ShoppingList = response.data;
+        return processList(data);
     } catch (error) {
         console.error("Error creating shopping list:", error);
         throw error;
