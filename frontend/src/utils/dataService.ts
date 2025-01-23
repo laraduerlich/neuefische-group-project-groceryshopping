@@ -93,7 +93,11 @@ export const createShoppingList = async (
     newList: Omit<ShoppingList, "id">
 ): Promise<ShoppingList> => {
     try {
-        const response = await axios.post('/api/shoppinglists', newList);
+        const response = await axios.post("/api/shoppinglists", newList, {
+            headers: { "Content-Type": "application/json" },
+        });
+
+
         const data: ShoppingList = response.data;
         console.log(data, "data");
         return processList(data);

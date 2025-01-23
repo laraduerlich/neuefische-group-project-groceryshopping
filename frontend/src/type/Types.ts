@@ -1,16 +1,16 @@
 export enum Section {
-    FRUIT = "fruit",
-    VEGETABLES = "vegetables",
-    DAIRY = "dairy",
-    MEAT = "meat",
-    BAKERY = "bakery",
-    BEVERAGES = "beverages",
-    FROZEN = "frozen",
-    SNACKS = "snacks",
-    PANTRY = "pantry",
-    HOUSEHOLD = "household",
-    PERSONAL_CARE = "personal care",
-    OTHER = "other", // Ensure "other" is part of the enum
+    OTHER = "OTHER",
+    VEGETABLES = "VEGETABLES",
+    DAIRY = "DAIRY",
+    FRUIT = "FRUIT",
+    SNACKS = "SNACKS",
+    MEAT = "MEAT",
+    PANTRY = "PANTRY",
+    HOUSEHOLD = "HOUSEHOLD",
+    BAKERY = "BAKERY",
+    BEVERAGES = "BEVERAGES",
+    FROZEN = "FROZEN",
+    PERSONAL_CARE = "PERSONAL_CARE",
 }
 
 // Item type matches the backend's Item model

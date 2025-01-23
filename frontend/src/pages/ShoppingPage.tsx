@@ -2,7 +2,8 @@ import GroupedItems from "../components/GroupedItems.tsx";
 import {getShoppingListById} from "../utils/dataService.ts";
 import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {ShoppingList} from "../type/Types.ts";
+import {ShoppingList} from "../type/Types.ts"
+
 
 export default function ShoppingPage(){
 
