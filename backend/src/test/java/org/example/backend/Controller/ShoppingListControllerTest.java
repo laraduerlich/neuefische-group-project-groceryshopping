@@ -1,5 +1,6 @@
 package org.example.backend.Controller;
 
+import com.jayway.jsonpath.JsonPath;
 import org.example.backend.DTO.CreateItemDTO;
 import org.example.backend.DTO.CreateShoppingListDTO;
 import org.example.backend.DTO.CreateShoppingListEntryDTO;
@@ -59,8 +60,8 @@ class ShoppingListControllerTest {
    // ------------------- Utility Methods -------------------
 
    private void saveMockShoppingList() {
-      shoppingListRepo.save(new ShoppingList(
-          "678fabf9e82a503f87653123f",
+      ShoppingList shoppingList = new ShoppingList(
+          "678fabf9e82a503f8765371f", // Manually set the ID
           mockCreateShoppingListDTO.name(),
           mockCreateShoppingListDTO.list().stream()
               .map(entry -> new ShoppingListEntry(
@@ -73,8 +74,10 @@ class ShoppingListControllerTest {
                   entry.quantity()
               ))
               .toList()
-      ));
+      );
+      shoppingListRepo.save(shoppingList);
    }
+
 
    private String getMockCreateShoppingListPayload() {
       return """
@@ -149,15 +152,24 @@ class ShoppingListControllerTest {
 
    // 3. ------------------- CREATE SHOPPING LIST -------------------
 
-//   @Test
-//   void addShoppingList_shouldCreateAndReturnShoppingList() throws Exception {
-//      mockMvc.perform(post("/api/shoppinglists")
-//             .contentType(MediaType.APPLICATION_JSON)
-//             .content(getMockCreateShoppingListPayload()))
-//          .andExpect(status().isCreated())
-//          .andExpect(jsonPath("$.id").value("678fabf9e82a503f8765371f"))
-//          .andExpect(jsonPath("$.name").value("Weekly Groceries"));
-//   }
+   @Test
+   void addShoppingList_shouldCreateAndReturnShoppingList() throws Exception {
+      String response = mockMvc.perform(post("/api/shoppinglists")
+                                            .contentType(MediaType.APPLICATION_JSON)
+                                            .content(getMockCreateShoppingListPayload()))
+          .andExpect(status().isCreated())
+          .andReturn().getResponse().getContentAsString();
+
+      // Parse the response to extract the generated ID
+      String generatedId = JsonPath.parse(response).read("$.id");
+
+      // Use the generated ID for further assertions
+      mockMvc.perform(get("/api/shoppinglists/{id}", generatedId))
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$.id").value(generatedId))
+          .andExpect(jsonPath("$.name").value("Weekly Groceries"));
+   }
+
 
    @Test
    void addShoppingList_shouldReturnBadRequest_WhenInputIsInvalid() throws Exception {
@@ -169,35 +181,37 @@ class ShoppingListControllerTest {
 
    // 4. ------------------- EDIT SHOPPING LIST -------------------
 
-//   @Test
-//   void updateShoppingList_shouldUpdateAndReturnShoppingList() throws Exception {
-//      saveMockShoppingList();
-//      ShoppingList savedList = shoppingListRepo.findAll().getFirst();
-//
-//      mockMvc.perform(put("/api/shoppinglists/{id}", savedList.id())
-//                          .contentType(MediaType.APPLICATION_JSON)
-//                          .content("""
-//                    {
-//                      "id": "678fabf9e82a503f8765371f",
-//                      "name": "Updated Weekly Groceries",
-//                      "list": [
-//                        {
-//                          "item": {
-//                            "name": "Eggs",
-//                            "checked": false,
-//                            "section": "DAIRY"
-//                          },
-//                          "quantity": "12"
-//                        }
-//                      ]
-//                    }
-//                   """))
-//          .andExpect(status().isOk())
-//          .andExpect(jsonPath("$.id").value("678fabf9e82a503f8765371f"))
-//          .andExpect(jsonPath("$.name").value("Updated Weekly Groceries"))
-//          .andExpect(jsonPath("$.list[0].item.name").value("Eggs"))
-//          .andExpect(jsonPath("$.list[0].quantity").value("12"));
-//   }
+   @Test
+   void updateShoppingList_shouldUpdateAndReturnShoppingList() throws Exception {
+      saveMockShoppingList();
+      ShoppingList savedList = shoppingListRepo.findAll().get(0);
+
+      mockMvc.perform(put("/api/shoppinglists/{id}", savedList.id())
+                          .contentType(MediaType.APPLICATION_JSON)
+                          .content("""
+                {
+                  "id": "678fabf9e82a503f8765371f",
+                  "name": "Updated Weekly Groceries",
+                  "list": [
+                    {
+                      "item": {
+                        "id": "5e5bd3e2-4d1f-4679-8c24-2c839d3c4921",
+                        "name": "Eggs",
+                        "checked": false,
+                        "section": "DAIRY"
+                      },
+                      "quantity": "12"
+                    }
+                  ]
+                }
+                """))
+          .andExpect(status().isOk())
+          .andExpect(jsonPath("$.id").value("678fabf9e82a503f8765371f"))
+          .andExpect(jsonPath("$.name").value("Updated Weekly Groceries"))
+          .andExpect(jsonPath("$.list[0].item.name").value("Eggs"))
+          .andExpect(jsonPath("$.list[0].quantity").value("12"));
+   }
+
 
    @Test
    void updateShoppingList_shouldReturnNotFound_WhenIdDoesNotExist() throws Exception {

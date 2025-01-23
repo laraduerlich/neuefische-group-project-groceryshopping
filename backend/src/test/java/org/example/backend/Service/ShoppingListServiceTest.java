@@ -95,6 +95,7 @@ class ShoppingListServiceTest {
       // Then
       assertEquals(1, result.size(), "The number of shopping lists should match.");
       assertEquals(mockShoppingLists, result, "The returned lists should match the mock data.");
+      assertEquals("678fabf9e82a503f8765371f", result.getFirst().id(), "The ID should match the mocked shopping list.");
       verify(repo, times(1)).findAll();
    }
 
@@ -103,17 +104,18 @@ class ShoppingListServiceTest {
    void findShoppingListById_shouldReturnShoppingList_WhenIdExists() {
       // Given
       String id = "678fabf9e82a503f8765371f";
-      when(repo.findById(id)).thenReturn(Optional.of(mockShoppingLists.getFirst()));
+      when(repo.findById(id)).thenReturn(Optional.of(mockShoppingLists.get(0)));
 
       // When
       ShoppingList result = service.findShoppingListById(id);
 
       // Then
       assertNotNull(result, "The result should not be null.");
-      assertEquals("678fabf9e82a503f8765371f", result.id(), "The id should match the expected shopping list.");
+      assertEquals("678fabf9e82a503f8765371f", result.id(), "The ID should match the mocked shopping list.");
       assertEquals("Weekly Groceries", result.name(), "The name should match the expected shopping list.");
       verify(repo, times(1)).findById(id);
    }
+
 
    @Test
    void findShoppingListById_shouldThrowException_WhenIdDoesNotExist() {
@@ -149,10 +151,11 @@ class ShoppingListServiceTest {
 
       // Then
       assertNotNull(result, "The result should not be null.");
-      assertEquals("678faeb0ae3ae049b3e0032f", result.id(), "The id should match the expected shopping list.");
+      assertEquals("678faeb0ae3ae049b3e0032f", result.id(), "The ID should match the expected shopping list.");
       assertEquals(expected.name(), result.name(), "The names should match.");
       verify(repo, times(1)).save(any(ShoppingList.class));
    }
+
 
    @Test
    void createShoppingList_shouldThrowValidationException_WhenNameIsBlank() {
@@ -181,7 +184,7 @@ class ShoppingListServiceTest {
                   new CreateItemDTO("Eggs", false, Section.DAIRY),
                   "12"
               )
-          )
+                 )
       );
 
       ShoppingList updatedList = new ShoppingList(
@@ -203,9 +206,11 @@ class ShoppingListServiceTest {
 
       // Then
       assertEquals(updatedList.name(), result.name(), "Updated names should match.");
+      assertEquals("678fabf9e82a503f8765371f", result.id(), "The ID should match the mocked shopping list.");
       verify(repo, times(1)).findById(id);
       verify(repo, times(1)).save(any(ShoppingList.class));
    }
+
 
    @Test
    void updateShoppingList_shouldThrowException_WhenIdDoesNotExist() {
