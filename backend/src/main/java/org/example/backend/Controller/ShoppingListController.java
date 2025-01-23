@@ -44,7 +44,7 @@ public class ShoppingListController {
     public ResponseEntity<ShoppingList> updateShoppingList(
         @PathVariable String id,
         @RequestBody @Valid CreateShoppingListDTO updateShoppingListDTO
-                                                          ) {
+        ) {
         ShoppingList updatedList = shoppingListService.updateShoppingList(id, updateShoppingListDTO);
         return ResponseEntity.ok(updatedList); // HTTP 200 OK
     }
