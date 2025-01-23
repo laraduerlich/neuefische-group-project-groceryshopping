@@ -3,6 +3,9 @@ package org.example.backend.Service;
 import org.example.backend.DTO.CreateItemDTO;
 import org.example.backend.DTO.CreateShoppingListDTO;
 import org.example.backend.DTO.CreateShoppingListEntryDTO;
+import org.example.backend.Exception.DuplicateResourceException;
+import org.example.backend.Exception.ResourceNotFoundException;
+import org.example.backend.Exception.ValidationException;
 import org.example.backend.Model.Item;
 import org.example.backend.Model.Section;
 import org.example.backend.Model.ShoppingList;
@@ -243,4 +246,94 @@ class ShoppingListServiceTest {
       verify(repo, times(1)).existsById(id);
       verify(repo, never()).deleteById(any());
    }
+
+   // test validations
+
+   @Test
+   void validateShoppingListDTO_shouldThrowValidationException_WhenNameIsNull() {
+      // Given
+      CreateShoppingListDTO invalidDTO = new CreateShoppingListDTO(null, List.of(
+          new CreateShoppingListEntryDTO(new CreateItemDTO("Milk", false, Section.DAIRY), 2)
+                                                                                ));
+
+      // When & Then
+      Exception exception = assertThrows(ValidationException.class,
+                                         () -> service.validateShoppingListDTO(invalidDTO));
+      assertEquals("Shopping list name cannot be blank.", exception.getMessage());
+   }
+
+   @Test
+   void validateShoppingListDTO_shouldThrowValidationException_WhenListIsNull() {
+      // Given
+      CreateShoppingListDTO invalidDTO = new CreateShoppingListDTO("Weekly Groceries", null);
+
+      // When & Then
+      Exception exception = assertThrows(ValidationException.class,
+                                         () -> service.validateShoppingListDTO(invalidDTO));
+      assertEquals("Shopping list must contain at least one item.", exception.getMessage());
+   }
+
+   @Test
+   void validateShoppingListDTO_shouldThrowValidationException_WhenEntryItemIsNull() {
+      // Given
+      CreateShoppingListDTO invalidDTO = new CreateShoppingListDTO("Weekly Groceries", List.of(
+          new CreateShoppingListEntryDTO(null, 2)
+                                                                                              ));
+
+      // When & Then
+      Exception exception = assertThrows(
+          ValidationException.class,
+          () -> service.validateShoppingListDTO(invalidDTO));
+      assertEquals("Each shopping list entry must have an item.", exception.getMessage());
+   }
+
+   // 6. ------------------- VALIDATIONS -------------------
+
+   @Test
+   void validateShoppingListDTO_shouldThrowValidationException_WhenQuantityIsInvalid() {
+      // Given
+      CreateShoppingListDTO invalidDTO = new CreateShoppingListDTO("Weekly Groceries", List.of(
+          new CreateShoppingListEntryDTO(new CreateItemDTO("Milk", false, Section.DAIRY), 0)
+                                                                                              ));
+
+      // When & Then
+      Exception exception = assertThrows(ValidationException.class,
+                                         () -> service.validateShoppingListDTO(invalidDTO));
+      assertEquals("Quantity must be greater than 0.", exception.getMessage());
+   }
+
+   @Test
+   void findShoppingListById_shouldThrowResourceNotFoundException_WhenIdDoesNotExist() {
+      // Given
+      String id = "non-existent-id";
+      when(repo.findById(id)).thenReturn(Optional.empty());
+
+      // When & Then
+      Exception exception = assertThrows(
+          ResourceNotFoundException.class,
+          () -> service.findShoppingListById(id));
+      assertEquals("Shopping list with ID " + id + " not found.", exception.getMessage());
+   }
+
+   @Test
+   void createShoppingList_shouldThrowDuplicateResourceException_WhenNameAlreadyExists() {
+      // Given
+      CreateShoppingListDTO newList = new CreateShoppingListDTO(
+          "Duplicate Name",
+          List.of(new CreateShoppingListEntryDTO(
+              new CreateItemDTO("Milk", false, Section.DAIRY),
+              2 // Quantity greater than 0
+          ))
+      );
+      when(repo.existsByName("Duplicate Name")).thenReturn(true);
+
+      // When & Then
+      Exception exception = assertThrows(
+          DuplicateResourceException.class,
+          () -> service.createShoppingList(newList)
+                                        );
+
+      assertEquals("Shopping list with name 'Duplicate Name' already exists.", exception.getMessage());
+   }
+
 }

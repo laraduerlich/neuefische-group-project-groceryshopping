@@ -3,7 +3,6 @@ package org.example.backend.Service;
 import org.example.backend.DTO.CreateShoppingListDTO;
 import org.example.backend.DTO.CreateShoppingListEntryDTO;
 import org.example.backend.Exception.DuplicateResourceException;
-import org.example.backend.Exception.InvalidOperationException;
 import org.example.backend.Exception.ResourceNotFoundException;
 import org.example.backend.Exception.ValidationException;
 import org.example.backend.Model.Item;
@@ -40,6 +39,11 @@ public class ShoppingListService {
     public ShoppingList createShoppingList(CreateShoppingListDTO createShoppingListDTO) {
         validateShoppingListDTO(createShoppingListDTO);
 
+        // Check for duplicate shopping list name
+        if (shoppingListRepo.existsByName(createShoppingListDTO.name())) {
+            throw new DuplicateResourceException("Shopping list with name '" + createShoppingListDTO.name() + "' already exists.");
+        }
+
         List<ShoppingListEntry> entries = createShoppingListDTO.list().stream()
             .map(entryDTO -> {
                 Item item = new Item(
@@ -61,6 +65,7 @@ public class ShoppingListService {
         return shoppingListRepo.save(shoppingList);
     }
 
+
     // 4. Logic for PUT: Edit ShoppingList by id
     public ShoppingList updateShoppingList(String id, CreateShoppingListDTO updateShoppingListDTO) {
         // Validate if the shopping list exists
@@ -69,12 +74,6 @@ public class ShoppingListService {
 
         // Validate the incoming DTO
         validateShoppingListDTO(updateShoppingListDTO);
-
-        // Check for duplicate shopping list name
-        if (!existingList.name().equals(updateShoppingListDTO.name()) &&
-            shoppingListRepo.existsByName(updateShoppingListDTO.name())) {
-            throw new DuplicateResourceException("Shopping list with name '" + updateShoppingListDTO.name() + "' already exists.");
-        }
 
         // Map DTO to updated ShoppingList
         List<ShoppingListEntry> updatedEntries = updateShoppingListDTO.list().stream()
@@ -89,11 +88,11 @@ public class ShoppingListService {
             ))
             .toList();
 
-        // Create a new ShoppingList record with updated values
+        // Update the existing shopping list's fields
         ShoppingList updatedList = new ShoppingList(
             existingList.id(), // Retain the original ID
-            updateShoppingListDTO.name(),
-            updatedEntries
+            updateShoppingListDTO.name(), // Update the name
+            updatedEntries // Update the items
         );
 
         // Save updated shopping list
@@ -109,7 +108,7 @@ public class ShoppingListService {
     }
 
     // HELPER FUNCTION: Validation logic for the CreateShoppingListDTO
-    private void validateShoppingListDTO(CreateShoppingListDTO dto) {
+     void validateShoppingListDTO(CreateShoppingListDTO dto) {
         if (dto.name() == null || dto.name().isBlank()) {
             throw new ValidationException("Shopping list name cannot be blank.");
         }
