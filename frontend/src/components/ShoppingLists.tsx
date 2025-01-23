@@ -1,65 +1,84 @@
-import {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import SearchInput from "./SearchInput";
+import ButtonWithIcon from "./ButtonWithIcon";
+import CartIcon from "./CartIcon";
+import ViewIcon from "./ViewIcon";
+import { getAllShoppingLists } from "../utils/dataService";
+import { ShoppingList } from "../type/Types"; // Ensure ShoppingList is imported
 
-type ShoppingListsProps = {
-    lists?: {
-        id: string,
-        name: string
-    }[],
-    //onButtonClick: (item: { id: string, name: string }) => void
-}
-
-export default function ShoppingLists ({ lists = [] }: ShoppingListsProps) {
-
-    const [searchTerm, setSearchTerm] = useState('');
-
+export default function ShoppingLists() {
+    const [searchTerm, setSearchTerm] = useState("");
+    const [shoppingLists, setShoppingLists] = useState<ShoppingList[]>([]); // State uses ShoppingList[]
     const navigate = useNavigate();
 
-    const filteredList = lists?.filter((shoppingList) =>
-        shoppingList.name.toLowerCase().includes(searchTerm.toLowerCase())) || [];
+    // Filtered list based on search term
+    const filteredList = shoppingLists.filter((shoppingList) =>
+        shoppingList.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
+    // Fetch shopping lists on component mount
+    useEffect(() => {
+        getAllShoppingLists()
+            .then((data) => setShoppingLists(data)) // Set the fetched shopping lists
+            .catch((error) => console.error("Error fetching shopping lists:", error));
+    }, []);
+
+    // Button handlers
     const handleGoShoppingButtonClick = (id: string) => {
-        navigate("/shopping/" + id)
+        navigate("/shopping/" + id); // Navigate to the shopping page for the list
+    };
+
+    const handleViewButtonClick = (id: string) => {
+        navigate("/shoppinglist?id=" + id); // Navigate to the shopping list details page
     };
 
     const handleNewShoppingListButtonClick = () => {
-        navigate("/shoppinglist")
+        navigate("/shoppinglist"); // Navigate to the page for creating a new shopping list
     };
 
     return (
-        <>
-        <div className="flex justify-between items-center w-full">
-            <input
-                type="text"
-                placeholder="Search for a list"
-                className="flex-grow p-2 border border-gray-300 rounded-md"
-                onChange={(e) => setSearchTerm(e.target.value)}
-            />
-            <button
-                onClick={() => handleNewShoppingListButtonClick()}
-                className="ml-4 px-4 py-2 text-sm text-white bg-blue-500 rounded-md hover:bg-blue-600"
-            >
-                New shopping list
-            </button>
-        </div>
-            <div className="shopping-list space-y-4">
-                <ul className="space-y-2">
+        <div className="max-w-3xl mx-auto space-y-8 px-4">
+            {/* Search and New List Button */}
+            <div className="flex flex-col sm:flex-row items-center w-full max-w-3xl mx-auto my-6 space-y-4 sm:space-y-0 sm:space-x-4">
+                <SearchInput value={searchTerm} onChange={setSearchTerm} />
+                <button
+                    onClick={handleNewShoppingListButtonClick}
+                    className="w-full sm:w-auto h-12 px-5 py-3 text-sm font-semibold text-white bg-red-500 rounded-lg shadow-md hover:bg-red-600 flex items-center justify-center space-x-2 min-w-[200px]"
+                >
+                    <span>+</span>
+                    <span>Create New List</span>
+                </button>
+            </div>
+
+            {/* List of Shopping Lists */}
+            <div className="space-y-4">
+                <ul className="space-y-4">
                     {filteredList.map((list) => (
                         <li
                             key={list.id}
-                            className="flex items-center justify-between p-4 border border-gray-300 rounded-md bg-gray-100 shadow-sm hover:bg-gray-200"
-                    >
-                        <span className="text-sm font-medium text-gray-800">{list.name}</span>
-                        <button
-                            onClick={() => handleGoShoppingButtonClick(list.id)}
-                            className="px-4 py-2 text-sm text-white bg-blue-500 rounded-md hover:bg-blue-600"
+                            className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-6 bg-white/40 rounded-md backdrop-blur-md hover:bg-white/60"
                         >
-                            🛒
-                        </button>
-                    </li>
-                ))}
-            </ul>
+              <span className="text-lg font-semibold text-gray-800 text-center sm:text-left">
+                {list.name}
+              </span>
+                            {/* Buttons Container */}
+                            <div className="flex space-x-4">
+                                <ButtonWithIcon
+                                    text="View"
+                                    onClick={() => handleViewButtonClick(list.id)}
+                                    icon={<ViewIcon />}
+                                />
+                                <ButtonWithIcon
+                                    text="Go Shop"
+                                    onClick={() => handleGoShoppingButtonClick(list.id)}
+                                    icon={<CartIcon />}
+                                />
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            </div>
         </div>
-        </>
-    )
+    );
 }
