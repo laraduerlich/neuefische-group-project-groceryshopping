@@ -10,6 +10,8 @@ export default function ShoppingListPage(){
 
     const [shoppingListName, setShoppingListName] = useState("");
 
+    const navigate = useNavigate();
+
     const handleGoShoppingButtonClick = () => {
         const id: string = ""  // Get this from the POST API call
         navigate("/shopping/" + id)
@@ -19,9 +21,7 @@ export default function ShoppingListPage(){
         // Add POST API call here
         navigate("/")
     };
-
-    const navigate = useNavigate();
-
+    
     const handleSubmitNewItem = (item: Item, quantity: string) => {
         setItems([...items, {item, quantity}]);
         console.log(items);
