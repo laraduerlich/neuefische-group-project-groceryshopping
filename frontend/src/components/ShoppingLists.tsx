@@ -13,29 +13,41 @@ export default function ShoppingLists() {
     const navigate = useNavigate();
 
     // Filtered list based on search term
-    const filteredList = shoppingLists.filter((shoppingList) =>
-        shoppingList.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredList = shoppingLists?.filter((shoppingList) =>
+           shoppingList?.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     // Fetch shopping lists on component mount
     useEffect(() => {
         getAllShoppingLists()
-            .then((data) => setShoppingLists(data)) // Set the fetched shopping lists
-            .catch((error) => console.error("Error fetching shopping lists:", error));
+            .then((data) => {
+                console.log("Fetched shopping lists successfully:", data); // Log fetched data
+                setShoppingLists(data); // Set the fetched shopping lists
+            })
+            .catch((error) => {
+                console.error("Error fetching shopping lists:", error); // Log errors
+            });
+
+        console.log("filteredList",filteredList);
     }, []);
 
     // Button handlers
-    const handleGoShoppingButtonClick = (id: string) => {
+    const handleGoShoppingButtonClick = (id: string | undefined) => {
         navigate("/shopping/" + id); // Navigate to the shopping page for the list
     };
 
-    const handleViewButtonClick = (id: string) => {
+    const handleViewButtonClick = (id: string | undefined) => {
         navigate("/shoppinglist?id=" + id); // Navigate to the shopping list details page
     };
 
     const handleNewShoppingListButtonClick = () => {
         navigate("/shoppinglist"); // Navigate to the page for creating a new shopping list
     };
+
+    useEffect(() => {
+        console.log("filteredList", filteredList);
+    }, [shoppingLists, searchTerm]);
+
 
     return (
         <div className="max-w-3xl mx-auto space-y-8 px-4">

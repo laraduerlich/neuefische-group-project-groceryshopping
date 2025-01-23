@@ -28,6 +28,7 @@ export default function ShoppingPage(){
                 }
             };
         fetchList();
+
     }}, [id]);
 
     if (isLoading) return <div>Loading...</div>;

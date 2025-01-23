@@ -4,13 +4,13 @@ import { ShoppingList, Section } from "../type/Types.ts";
 
 // Fallback data cleaning/processing
 const processList = (list: ShoppingList): ShoppingList => ({
-    ...list,
+    id: list.id || "",
     name: list.name || "Unnamed List",
     list: list.list.map((entry) => ({
-        ...entry,
         quantity: entry.quantity || "1", // Ensure quantity has a default
         item: {
             ...entry.item,
+            id: entry.item.id || "",
             name: entry.item.name || "Unnamed Item", // Ensure item name has a default
             section: entry.item.section || Section.OTHER, // Use Section enum explicitly
         },
@@ -19,13 +19,13 @@ const processList = (list: ShoppingList): ShoppingList => ({
 
 // Get all shopping lists
 export const getAllShoppingLists = async (): Promise<ShoppingList[]> => {
+    // eslint-disable-next-line no-useless-catch
     try {
         const response = await axios.get('/api/shoppinglists');
         const data: ShoppingList[] = response.data;
-
         return data.map(processList); // Process the list to ensure fallback values
     } catch (error) {
-        console.error("Error fetching shopping lists:", error);
+        // console.error("Error fetching shopping lists:", error);
         throw error;
     }
 };
@@ -95,6 +95,7 @@ export const createShoppingList = async (
     try {
         const response = await axios.post('/api/shoppinglists', newList);
         const data: ShoppingList = response.data;
+        console.log(data, "data");
         return processList(data);
     } catch (error) {
         console.error("Error creating shopping list:", error);
