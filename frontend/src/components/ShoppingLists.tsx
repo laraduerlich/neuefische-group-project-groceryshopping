@@ -13,6 +13,8 @@ export default function ShoppingLists ({ lists = [] }: ShoppingListsProps) {
 
     const [searchTerm, setSearchTerm] = useState('');
 
+    const navigate = useNavigate();
+
     const filteredList = lists?.filter((shoppingList) =>
         shoppingList.name.toLowerCase().includes(searchTerm.toLowerCase())) || [];
 
@@ -23,8 +25,6 @@ export default function ShoppingLists ({ lists = [] }: ShoppingListsProps) {
     const handleNewShoppingListButtonClick = () => {
         navigate("/shoppinglist")
     };
-
-    const navigate = useNavigate();
 
     return (
         <>
