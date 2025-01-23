@@ -14,7 +14,7 @@ export default function ShoppingLists ({lists}: ShoppingListsProps)  {
     const [searchTerm, setSearchTerm] = useState('');
 
     const filteredList = lists.filter((shoppingList) =>
-        shoppingList.name.toLowerCase().includes(searchTerm.toLowerCase()));
+        shoppingList.name.toLowerCase().includes(searchTerm.toLowerCase())) || [];
 
     const handleGoShoppingButtonClick = (id: string) => {
         navigate("/shopping/" + id)
