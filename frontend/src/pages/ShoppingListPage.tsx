@@ -18,7 +18,7 @@ export default function ShoppingListPage(){
             Shopping List Page
             <ItemForm onSubmit={handleSubmitNewItem}
             />
-            <GroupedItems items={items}/>
+            <GroupedItems items={items} checkbox={false}/>
         </div>
     );
 
