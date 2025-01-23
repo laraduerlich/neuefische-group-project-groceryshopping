@@ -50,9 +50,9 @@ class ShoppingListServiceTest {
                       new Item(UUID.fromString("101f250e-eb5b-4324-be7e-f4e976426091"), "Bread", false, Section.BAKERY),
                       1
                   )
-                     )
+              )
           )
-                                 );
+      );
 
       // Mock CreateShoppingListDTO
       mockCreateShoppingListDTO = new CreateShoppingListDTO(
@@ -66,7 +66,7 @@ class ShoppingListServiceTest {
                   new CreateItemDTO("Bread", false, Section.BAKERY),
                   1
               )
-                 )
+          )
       );
    }
 
@@ -179,7 +179,7 @@ class ShoppingListServiceTest {
                   new CreateItemDTO("Eggs", false, Section.DAIRY),
                   12
               )
-                 )
+          )
       );
 
       ShoppingList updatedList = new ShoppingList(
@@ -258,7 +258,7 @@ class ShoppingListServiceTest {
 
       // When & Then
       Exception exception = assertThrows(ValidationException.class,
-                                         () -> service.validateShoppingListDTO(invalidDTO));
+      () -> service.validateShoppingListDTO(invalidDTO));
       assertEquals("Shopping list name cannot be blank.", exception.getMessage());
    }
 
@@ -269,7 +269,7 @@ class ShoppingListServiceTest {
 
       // When & Then
       Exception exception = assertThrows(ValidationException.class,
-                                         () -> service.validateShoppingListDTO(invalidDTO));
+      () -> service.validateShoppingListDTO(invalidDTO));
       assertEquals("Shopping list must contain at least one item.", exception.getMessage());
    }
 
@@ -278,7 +278,7 @@ class ShoppingListServiceTest {
       // Given
       CreateShoppingListDTO invalidDTO = new CreateShoppingListDTO("Weekly Groceries", List.of(
           new CreateShoppingListEntryDTO(null, 2) // Entry.item is null
-                                                                                              ));
+      ));
 
       // When & Then
       Exception exception = assertThrows(
@@ -292,11 +292,11 @@ class ShoppingListServiceTest {
       // Given
       CreateShoppingListDTO invalidDTO = new CreateShoppingListDTO("Weekly Groceries", List.of(
           new CreateShoppingListEntryDTO(new CreateItemDTO("Milk", false, Section.DAIRY), 0) // Invalid quantity
-                                                                                              ));
+      ));
 
       // When & Then
       Exception exception = assertThrows(ValidationException.class,
-                                         () -> service.validateShoppingListDTO(invalidDTO));
+        () -> service.validateShoppingListDTO(invalidDTO));
       assertEquals("Quantity must be greater than 0.", exception.getMessage());
    }
 
@@ -329,8 +329,7 @@ class ShoppingListServiceTest {
       Exception exception = assertThrows(
           DuplicateResourceException.class,
           () -> service.createShoppingList(newList)
-                                        );
-
+      );
       assertEquals("Shopping list with name 'Duplicate Name' already exists.", exception.getMessage());
    }
 }

@@ -127,9 +127,6 @@ public class ShoppingListService {
             if (entry.item().name() == null || entry.item().name().isBlank()) {
                 throw new ValidationException("Item name cannot be blank.");
             }
-            if (entry.item().section() == null) {
-                throw new ValidationException("Item section cannot be null.");
-            }
         }
     }
 }
