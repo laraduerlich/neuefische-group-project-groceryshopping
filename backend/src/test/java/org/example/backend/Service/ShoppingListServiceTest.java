@@ -44,11 +44,11 @@ class ShoppingListServiceTest {
               List.of(
                   new ShoppingListEntry(
                       new Item(UUID.fromString("afa8a75e-3e03-40e8-b794-e21ab60ccde0"), "Milk", false, Section.DAIRY),
-                      2
+                      "2"
                   ),
                   new ShoppingListEntry(
                       new Item(UUID.fromString("101f250e-eb5b-4324-be7e-f4e976426091"), "Bread", false, Section.BAKERY),
-                      1
+                      "1"
                   )
               )
           )
@@ -60,11 +60,11 @@ class ShoppingListServiceTest {
           List.of(
               new CreateShoppingListEntryDTO(
                   new CreateItemDTO("Milk", false, Section.DAIRY),
-                  2
+                  "2"
               ),
               new CreateShoppingListEntryDTO(
                   new CreateItemDTO("Bread", false, Section.BAKERY),
-                  1
+                  "1"
               )
           )
       );
@@ -103,13 +103,14 @@ class ShoppingListServiceTest {
    void findShoppingListById_shouldReturnShoppingList_WhenIdExists() {
       // Given
       String id = "678fabf9e82a503f8765371f";
-      when(repo.findById(id)).thenReturn(Optional.of(mockShoppingLists.get(0)));
+      when(repo.findById(id)).thenReturn(Optional.of(mockShoppingLists.getFirst()));
 
       // When
       ShoppingList result = service.findShoppingListById(id);
 
       // Then
       assertNotNull(result, "The result should not be null.");
+      assertEquals("678fabf9e82a503f8765371f", result.id(), "The id should match the expected shopping list.");
       assertEquals("Weekly Groceries", result.name(), "The name should match the expected shopping list.");
       verify(repo, times(1)).findById(id);
    }
@@ -131,7 +132,7 @@ class ShoppingListServiceTest {
    void createShoppingList_shouldSaveAndReturnShoppingList() {
       // Given
       ShoppingList expected = new ShoppingList(
-          "678fabf9e82a503f8765371f",
+          "678faeb0ae3ae049b3e0032f",
           mockCreateShoppingListDTO.name(),
           mockCreateShoppingListDTO.list().stream()
               .map(entry -> new ShoppingListEntry(
@@ -148,6 +149,7 @@ class ShoppingListServiceTest {
 
       // Then
       assertNotNull(result, "The result should not be null.");
+      assertEquals("678faeb0ae3ae049b3e0032f", result.id(), "The id should match the expected shopping list.");
       assertEquals(expected.name(), result.name(), "The names should match.");
       verify(repo, times(1)).save(any(ShoppingList.class));
    }
@@ -170,14 +172,14 @@ class ShoppingListServiceTest {
    void updateShoppingList_shouldUpdateAndReturnShoppingList_WhenIdExists() {
       // Given
       String id = "678fabf9e82a503f8765371f";
-      ShoppingList existingList = mockShoppingLists.get(0);
+      ShoppingList existingList = mockShoppingLists.getFirst();
 
       CreateShoppingListDTO updateDTO = new CreateShoppingListDTO(
           "Updated Groceries",
           List.of(
               new CreateShoppingListEntryDTO(
                   new CreateItemDTO("Eggs", false, Section.DAIRY),
-                  12
+                  "12"
               )
           )
       );
@@ -253,8 +255,8 @@ class ShoppingListServiceTest {
    void validateShoppingListDTO_shouldThrowValidationException_WhenNameIsNull() {
       // Given
       CreateShoppingListDTO invalidDTO = new CreateShoppingListDTO(null, List.of(
-          new CreateShoppingListEntryDTO(new CreateItemDTO("Milk", false, Section.DAIRY), 2)
-                                                                                ));
+          new CreateShoppingListEntryDTO(new CreateItemDTO("Milk", false, Section.DAIRY), "2")
+      ));
 
       // When & Then
       Exception exception = assertThrows(ValidationException.class,
@@ -277,7 +279,7 @@ class ShoppingListServiceTest {
    void validateShoppingListDTO_shouldThrowValidationException_WhenEntryItemIsNull() {
       // Given
       CreateShoppingListDTO invalidDTO = new CreateShoppingListDTO("Weekly Groceries", List.of(
-          new CreateShoppingListEntryDTO(null, 2) // Entry.item is null
+          new CreateShoppingListEntryDTO(null, "2") // Entry.item is null
       ));
 
       // When & Then
@@ -291,7 +293,7 @@ class ShoppingListServiceTest {
    void validateShoppingListDTO_shouldThrowValidationException_WhenQuantityIsInvalid() {
       // Given
       CreateShoppingListDTO invalidDTO = new CreateShoppingListDTO("Weekly Groceries", List.of(
-          new CreateShoppingListEntryDTO(new CreateItemDTO("Milk", false, Section.DAIRY), 0) // Invalid quantity
+          new CreateShoppingListEntryDTO(new CreateItemDTO("Milk", false, Section.DAIRY), "0" ) // Invalid quantity
       ));
 
       // When & Then
@@ -320,7 +322,7 @@ class ShoppingListServiceTest {
           "Duplicate Name",
           List.of(new CreateShoppingListEntryDTO(
               new CreateItemDTO("Milk", false, Section.DAIRY),
-              2 // Valid quantity
+              "2" // Valid quantity
           ))
       );
       when(repo.existsByName("Duplicate Name")).thenReturn(true);

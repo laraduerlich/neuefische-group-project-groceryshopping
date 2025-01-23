@@ -121,7 +121,7 @@ public class ShoppingListService {
             if (entry == null || entry.item() == null) { // Combine null checks
                 throw new ValidationException("Each shopping list entry must have a valid item.");
             }
-            if (entry.quantity() == null || entry.quantity() <= 0) {
+            if (entry.quantity() == null || entry.quantity().isEmpty() || entry.quantity().equals("0")) {
                 throw new ValidationException("Quantity must be greater than 0.");
             }
             if (entry.item().name() == null || entry.item().name().isBlank()) {

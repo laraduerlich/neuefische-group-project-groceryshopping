@@ -9,7 +9,7 @@
 		"checked": false,
 		"section": "DAIRY"
 	  },
-	  "quantity": 2
+	  "quantity": "2"
 	},
 	{
 	  "item": {
@@ -18,7 +18,7 @@
 		"checked": false,
 		"section": "BAKERY"
 	  },
-	  "quantity": 1
+	  "quantity": "1"
 	},
 	{
 	  "item": {
@@ -27,7 +27,7 @@
 		"checked": false,
 		"section": "DAIRY"
 	  },
-	  "quantity": 12
+	  "quantity": "12"
 	},
 	{
 	  "item": {
@@ -36,7 +36,7 @@
 		"checked": false,
 		"section": "FRUIT"
 	  },
-	  "quantity": 6
+	  "quantity": "6"
 	}
   ]
 },

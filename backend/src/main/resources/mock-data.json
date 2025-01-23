@@ -9,7 +9,7 @@
 		"checked": false,
 		"section": "DAIRY"
 	  },
-	  "quantity": 2
+	  "quantity": "2"
 	},
 	{
 	  "item": {
@@ -18,7 +18,7 @@
 		"checked": false,
 		"section": "BAKERY"
 	  },
-	  "quantity": 1
+	  "quantity": "1"
 	},
 	{
 	  "item": {
@@ -27,7 +27,7 @@
 		"checked": false,
 		"section": "DAIRY"
 	  },
-	  "quantity": 12
+	  "quantity": "12"
 	},
 	{
 	  "item": {
@@ -36,7 +36,7 @@
 		"checked": false,
 		"section": "FRUIT"
 	  },
-	  "quantity": 6
+	  "quantity": "6"
 	},
 	{
 	  "id": "678faeb0ae3ae049b3e0032f",
@@ -49,7 +49,7 @@
 			"checked": true,
 			"section": "PANTRY"
 		  },
-		  "quantity": 4
+		  "quantity": "4"
 		},
 		{
 		  "item": {
@@ -58,7 +58,7 @@
 			"checked": false,
 			"section": "DAIRY"
 		  },
-		  "quantity": 1
+		  "quantity": "1"
 		},
 		{
 		  "item": {
@@ -67,7 +67,7 @@
 			"checked": false,
 			"section": "FRUIT"
 		  },
-		  "quantity": 99
+		  "quantity": "99"
 		},
 		{
 		  "item": {
@@ -76,7 +76,7 @@
 			"checked": false,
 			"section": "FRUIT"
 		  },
-		  "quantity": 27
+		  "quantity": "27"
 		}
 	  ]
 	}
