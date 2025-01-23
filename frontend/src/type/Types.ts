@@ -24,7 +24,7 @@ export type Item = {
 // ShoppingListEntry type matches the backend's ShoppingListEntry model
 export type ShoppingListEntry = {
     item: Item; // Nested Item type
-    quantity: number; // Quantity of the item
+    quantity: string; // Quantity of the item
 };
 
 // ShoppingList type matches the backend's ShoppingList model

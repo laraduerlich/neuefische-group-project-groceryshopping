@@ -1,5 +1,5 @@
 import axios from "axios";
-import { mockShoppingLists, mockShoppingListById } from "../assets/mockData.ts";
+import { mockShoppingLists } from "../assets/mockData.ts";
 import { ShoppingList, Section } from "../type/Types.ts";
 
 // Fallback data cleaning/processing
@@ -8,7 +8,7 @@ const processList = (list: ShoppingList): ShoppingList => ({
     name: list.name || "Unnamed List",
     list: list.list.map((entry) => ({
         ...entry,
-        quantity: entry.quantity || 1, // Ensure quantity has a default
+        quantity: entry.quantity || "1", // Ensure quantity has a default
         item: {
             ...entry.item,
             name: entry.item.name || "Unnamed Item", // Ensure item name has a default
@@ -35,14 +35,13 @@ export const getAllShoppingLists = async (): Promise<ShoppingList[]> => {
 };
 
 // Get shopping list by ID
-export const getShoppingListById = async (id: string): Promise<ShoppingList> => {
+export const getShoppingListById = async (id: string | undefined): Promise<ShoppingList> => {
+    if (id === undefined){
+        throw new Error("No id provided")
+    }
     try {
-        // Uncomment the real API call when the backend is ready
-        // const response = await axios.get(`/api/shoppinglists/${id}`);
-        // const data: ShoppingList = response.data;
-
-        // Temporary use of mock data
-        const data: ShoppingList = mockShoppingListById;
+         const response = await axios.get(`/api/shoppinglists/${id}`);
+         const data: ShoppingList = response.data;
 
         return processList(data); // Process and return the data
     } catch (error) {
