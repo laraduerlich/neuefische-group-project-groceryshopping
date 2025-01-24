@@ -16,16 +16,6 @@ function App() {
 
     const[username, setUsername] = useState<string|undefined>()
 
-    function login() {
-        const host = window.location.host === "localhost:5173" ? "http://localhost:8080" : window.location.host
-        window.open(host + "/oauth2/authorization/github", "_self")
-    }
-
-    function logout() {
-        const host = window.location.host === "localhost:5173" ? "http://localhost:8080" : window.location.host
-        window.open(host + "/logout", "_self")
-    }
-
     function loadUser(){
         axios.get("/api/auth/me")
             .then(response => setUsername(response.data))
