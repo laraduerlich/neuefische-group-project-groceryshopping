@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -111,6 +112,7 @@ class ShoppingListControllerTest {
    // 1. ------------------- GET ALL SHOPPING LISTS -------------------
 
    @Test
+   @WithMockUser
    void getAllShoppingLists_shouldReturnEmptyList_whenRepositoryIsEmpty() throws Exception {
       mockMvc.perform(get("/api/shoppinglists"))
           .andExpect(status().isOk())
@@ -118,6 +120,7 @@ class ShoppingListControllerTest {
    }
 
    @Test
+   @WithMockUser
    void getAllShoppingLists_shouldReturnListOfShoppingLists_whenRepositoryHasData() throws Exception {
       saveMockShoppingList();
 
@@ -153,6 +156,7 @@ class ShoppingListControllerTest {
    // 3. ------------------- CREATE SHOPPING LIST -------------------
 
    @Test
+   @WithMockUser
    void addShoppingList_shouldCreateAndReturnShoppingList() throws Exception {
       String response = mockMvc.perform(post("/api/shoppinglists")
                                             .contentType(MediaType.APPLICATION_JSON)
@@ -172,6 +176,7 @@ class ShoppingListControllerTest {
 
 
    @Test
+   @WithMockUser
    void addShoppingList_shouldReturnBadRequest_WhenInputIsInvalid() throws Exception {
       mockMvc.perform(post("/api/shoppinglists")
                           .contentType(MediaType.APPLICATION_JSON)

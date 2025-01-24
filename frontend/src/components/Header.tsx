@@ -1,8 +1,9 @@
 export default function Header() {
     const navLinks = [
-        { name: "My Lists", path: "/" },
+        { name: "Login", path: "/"},
+        { name: "My Lists", path: "/home" },
         { name: "Create", path: "/shoppinglist" },
-        { name: "Shop", path: "/shopping/:id" },
+        // { name: "Shop", path: "/shopping/:id" },
     ];
 
     return (
