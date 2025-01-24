@@ -27,8 +27,6 @@ export default function ShoppingLists() {
             .catch((error) => {
                 console.error("Error fetching shopping lists:", error); // Log errors
             });
-
-        console.log("filteredList",filteredList);
     }, []);
 
     // Button handlers
@@ -37,17 +35,16 @@ export default function ShoppingLists() {
     };
 
     const handleViewButtonClick = (id: string | undefined) => {
-        navigate("/shoppinglist?id=" + id); // Navigate to the shopping list details page
+        if (id) {
+            navigate(`/shoppinglist/${id}`); // Use path parameter instead of query parameter
+        } else {
+            console.error("Invalid ID for viewing shopping list.");
+        }
     };
 
     const handleNewShoppingListButtonClick = () => {
         navigate("/shoppinglist"); // Navigate to the page for creating a new shopping list
     };
-
-    useEffect(() => {
-        console.log("filteredList", filteredList);
-    }, [shoppingLists, searchTerm]);
-
 
     return (
         <div className="max-w-3xl mx-auto space-y-8 px-4">

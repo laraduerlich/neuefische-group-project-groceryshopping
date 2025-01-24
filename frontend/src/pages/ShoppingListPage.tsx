@@ -23,7 +23,7 @@ export default function ShoppingListPage(){
             name: shoppingListName,
             list: items,
         };
-        // console.log("Sending new list to backend:", JSON.stringify(newList, null, 2));
+        console.log("Sending new list to backend:", JSON.stringify(newList, null, 2));
 
         try {
             setIsLoading(true);
@@ -78,7 +78,6 @@ export default function ShoppingListPage(){
         <div className="shopping-list-page relative">
             {isLoading && <Loader />}
         <div className="shopping-list-page">
-            Shopping List Page
             <div className="relative rounded-md border border-gray-300">
                 <input type="text"
                        id="shoppingListName"
