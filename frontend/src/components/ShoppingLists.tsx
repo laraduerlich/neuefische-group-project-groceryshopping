@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import SearchInput from "./SearchInput";
 import ButtonWithIcon from "./ButtonWithIcon";
 import CartIcon from "./CartIcon";
@@ -11,30 +11,42 @@ export default function ShoppingLists() {
     const [searchTerm, setSearchTerm] = useState("");
     const [shoppingLists, setShoppingLists] = useState<ShoppingList[]>([]); // State uses ShoppingList[]
     const navigate = useNavigate();
+    const { id } = useParams<{ id: string }>();
+
 
     // Filtered list based on search term
-    const filteredList = shoppingLists.filter((shoppingList) =>
-        shoppingList.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredList = shoppingLists?.filter((shoppingList) =>
+           shoppingList?.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     // Fetch shopping lists on component mount
     useEffect(() => {
         getAllShoppingLists()
-            .then((data) => setShoppingLists(data)) // Set the fetched shopping lists
-            .catch((error) => console.error("Error fetching shopping lists:", error));
+            .then((data) => {
+                console.log("Fetched shopping lists successfully:", data); // Log fetched data
+                setShoppingLists(data); // Set the fetched shopping lists
+            })
+            .catch((error) => {
+                console.error("Error fetching shopping lists:", error); // Log errors
+            });
     }, []);
 
     // Button handlers
-    const handleGoShoppingButtonClick = (id: string) => {
+    const handleGoShoppingButtonClick = (id: string | undefined) => {
         navigate("/shopping/" + id); // Navigate to the shopping page for the list
     };
 
-    const handleViewButtonClick = (id: string) => {
-        navigate("/shoppinglist?id=" + id); // Navigate to the shopping list details page
+    const handleViewButtonClick = (id: string | undefined) => {
+        if (id) {
+            console.log("id in shoppingLists:", id)
+            navigate(`/shoppinglist/${id}`); // Use path parameter instead of query parameter
+        } else {
+            console.error("Invalid ID for viewing shopping list.");
+        }
     };
 
     const handleNewShoppingListButtonClick = () => {
-        navigate("/shoppinglist"); // Navigate to the page for creating a new shopping list
+        navigate("shoppinglist/new"); // Navigate to the page for creating a new shopping list
     };
 
     return (

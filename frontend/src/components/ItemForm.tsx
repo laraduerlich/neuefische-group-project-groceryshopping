@@ -1,4 +1,4 @@
-import {Item, Section} from "../type/Item.tsx";
+import {Section, Item} from "../type/Types.ts";
 import {FormEvent, useState} from "react";
 
 type ItemFormProps = {
@@ -22,8 +22,6 @@ export default function ItemForm({onSubmit}: ItemFormProps){
         setSection(null);
         setQuantity("1");
     };
-
-    const sections: Section[] = ["fruit", "vegetables", "dairy", "meat", "bakery", "beverages", "frozen", "snacks", "pantry", "household", "personal care", "other"];
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -54,7 +52,7 @@ export default function ItemForm({onSubmit}: ItemFormProps){
                             onChange={(e) => setSection(e.target.value as Section)}
                             className="w-full p-2 text-sm rounded-md focus:outline-none dark:bg-gray-100 dark:text-gray-800 focus:dark:bg-gray-50 focus:dark:border-blue-600">
                         <option value="" disabled>Select a section</option>
-                        {sections.map((section, index) => (
+                        {Object.values(Section).map((section, index) => (
                             <option key={index} value={section}>{section}</option>))}
                     </select>
                 </div>

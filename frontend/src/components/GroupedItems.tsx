@@ -1,4 +1,4 @@
-import {Item} from "../type/Item.tsx";
+import {Item} from "../type/Types.ts";
 import {useState} from "react";
 
 type ItemListProps = {
