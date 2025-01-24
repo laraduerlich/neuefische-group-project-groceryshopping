@@ -72,19 +72,10 @@ export const editShoppingListById = async (
     updatedList: Omit<ShoppingList, "id">
 ): Promise<ShoppingList> => {
     try {
-        // Uncomment the real API call when the backend is ready
-        // const response = await axios.put(`/api/shoppinglists/${id}`, updatedList);
-        // const data: ShoppingList = response.data;
-        // return processList(data);
+        const response = await axios.put(`/api/shoppinglists/${id}`, updatedList);
+        const data: ShoppingList = response.data;
+        return processList(data);
 
-        // Simulate edit in mock data (temporary)
-        const index = mockShoppingLists.findIndex((list) => list.id === id);
-        if (index !== -1) {
-            const updatedListWithId = { ...updatedList, id }; // Add back the ID for the mock data
-            mockShoppingLists[index] = processList(updatedListWithId);
-            return mockShoppingLists[index];
-        }
-        throw new Error(`List with ID ${id} not found.`);
     } catch (error) {
         console.error(`Error editing shopping list with ID ${id}:`, error);
         throw error;
