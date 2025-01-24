@@ -35,11 +35,14 @@ export const getShoppingListById = async (id: string | undefined): Promise<Shopp
     if (id === undefined){
         throw new Error("No id provided")
     }
+    console.log("id:", id)
     try {
          const response = await axios.get(`/api/shoppinglists/${id}`);
-         const data: ShoppingList = response.data;
-
-        return processList(data); // Process and return the data
+         const data: ShoppingList = response?.data;
+         console.log("data fetched", data);
+        const processedData = processList(data);
+        console.log("processed Data: ",processedData);
+        return processedData ; // Process and return the data
     } catch (error) {
         console.error(`Error fetching shopping list with ID ${id}:`, error);
         throw error;

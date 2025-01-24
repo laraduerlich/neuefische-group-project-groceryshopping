@@ -1,12 +1,12 @@
 import ItemForm from "../components/ItemForm.tsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import GroupedItems from "../components/GroupedItems.tsx";
 import {useNavigate} from "react-router-dom";
 import {createShoppingList} from "../utils/dataService.ts";
 import {ShoppingList, Item} from "../type/Types.ts";
 import {Loader} from "../components/Loader.tsx";
 
-export default function ShoppingListPage(){
+export default function CreateShoppingListPage(){
 
     const [items, setItems] = useState<{item: Item, quantity: string}[]>([]);
 
@@ -73,6 +73,10 @@ export default function ShoppingListPage(){
         const newItems = [...items, { item, quantity }];
         setItems(newItems);
     };
+
+    useEffect(() => {
+
+    }, []);
 
     return (
         <div className="shopping-list-page relative">
